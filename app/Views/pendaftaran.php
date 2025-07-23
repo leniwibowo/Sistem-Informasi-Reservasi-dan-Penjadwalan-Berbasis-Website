@@ -91,7 +91,8 @@
                         <p><strong>Nama: </strong><?= esc($pasien['nama']) ?></p>
 
 
-                        <form action="<?= base_url('jadwal/simpan') ?>" method="post">
+                        <form action="<?= base_url('antrian/simpan') ?>" method="post">
+                            <?= csrf_field() ?>
                             <div class="mb-3">
                                 <label for="keluhan" class="form-label">Keluhan</label>
                                 <textarea name="keluhan" class="form-control" rows="5" placeholder="Catat keluhan..."></textarea>

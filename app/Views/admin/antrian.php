@@ -50,10 +50,11 @@
     <div class="container-fluid">
         <div class="row">
             <nav class="col-md-2 sidebar py-4">
-                <a href="<?= base_url('/dokter/dashboard'); ?>">Dashboard</a>
-                <a href="<?= base_url('/dokter/antrian'); ?>">Antrian Pasien</a>
-                <a href="<?= base_url('/dokter/datapasien'); ?>">Data Pasien</a>
-                <a href="<?= base_url('/dokter/pasienterjadwal'); ?>">Pasien Terjadwal</a>
+                <a href="<?= base_url('/admin/dashboard'); ?>">Dashboard</a>
+                <a href="<?= base_url('/admin/antrian'); ?>">Antrian Pasien</a>
+                <a href="<?= base_url('/admin/kelolapasien'); ?>">kelola Data Pasien</a>
+                <a href="<?= base_url('/admin/kekoldokter'); ?>">Kelola Dokter</a>
+                <a href="<?= base_url('/admin/pasienterjadwal'); ?>">Pasien Terjadwal</a>
             </nav>
             <div class="col md-10">
                 <div class="topbar">
@@ -72,8 +73,7 @@
                                     <td>No</td>
                                     <td>Nomor Antrian</td>
                                     <td>Nama Pasien</td>
-                                    <td>Jenis Kelamin</td>
-                                    <td>Keluhan</td>
+                                    <td>Hari, Tanggal</td>
                                     <td>Status</td>
                                     <td>Aksi</td>
 
@@ -83,29 +83,34 @@
                             <tbody>
                                 <?php if (!empty($antrian)) : ?>
                                     <?php $no = 1;
-                                    foreach ($antrian as $a) : ?>
+                                    foreach ($pasienTerdaftar as $pasien) : ?>
                                         <tr>
                                             <td class="text-center"><?= $no++ ?></td>
-                                            <td class="text-center"><?= esc($a['id_antrian']) ?></td>
-                                            <td><?= esc($a['nama_pasien']) ?></td>
-                                            <td><?= esc($a['keluhan']) ?></td>
+                                            <td class="text-center"><?= esc($pasien['id_antrian']) ?></td>
+                                            <td><?= esc($pasien['nama_pasien']) ?></td>
+                                            <td><?= date('l, d F Y', strtotime($pasien['tanggal_pemeriksaan'])); ?></td>
                                             <td class="text-center">
-                                                <?php if ($a['status'] === 'Menunggu') : ?>
+                                                <?php if ($pasien['status'] === 'Menunggu') : ?>
                                                     <span class="badge bg-warning text-dark">Menunggu</span>
                                                 <?php else : ?>
                                                     <span class="badge bg-success">Sudah Diperiksa</span>
                                                 <?php endif; ?>
                                             </td>
                                             <td class="text-center">
-                                                <a href="<?= base_url('dokter/periksa/' . $a['id_jadwal']) ?>"
-                                                    class="btn btn-sm btn-primary me-1"
+                                                <a href="<?= base_url('admin/updatepasien/' . $a['id_jadwal']) ?>"
+                                                    class="btn btn-sm btn-info me-1"
                                                     title="Pemeriksaan Pasien">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </a>
-                                                <a href="<?= base_url('dokter/riwayat/' . $a['id_pasien']) ?>"
-                                                    class="btn btn-sm btn-secondary"
+                                                <a href="<?= base_url('admin/riwayat/' . $a['id_pasien']) ?>"
+                                                    class="btn btn-sm btn-warning"
                                                     title="Riwayat Pemeriksaan">
                                                     <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a href="<?= base_url('admin/profil/' . $a['id_pasien']) ?>"
+                                                    class="btn btn-sm btn-primary"
+                                                    title="Data Pasien">
+                                                    <i class="bi bi-person"></i>
                                                 </a>
                                             </td>
                                         </tr>

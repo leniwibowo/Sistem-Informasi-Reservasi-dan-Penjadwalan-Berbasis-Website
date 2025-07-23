@@ -24,7 +24,7 @@
 
         <div class="container mt-5">
             <div class="card shadow-sm rounded-4">
-                <div class="card-header bg-primary text-white rounded-top-4">
+                <div class="card-header bg-dark text-white rounded-top-4">
                     <h4 class="mb-0"><i class="bi bi-person-circle me-2"></i>Profil Pasien</h4>
                 </div>
                 <div class="card-body">

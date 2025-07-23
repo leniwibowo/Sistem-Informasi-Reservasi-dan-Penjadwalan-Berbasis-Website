@@ -19,6 +19,10 @@ class PasienModel extends Model
         'no_hp',
         'no_RM',
         'nik',
+        'golongan_darah',
+        'diabetes',
+        'penyakit_jantung',
+        'alergi',
         'created_at',
         'updated_at',
         'id_user'
@@ -29,5 +33,13 @@ class PasienModel extends Model
     public function getByNIK($nik)
     {
         return $this->where('NIK', $nik)->first();
+    }
+
+    public function getPasienPernahDaftar()
+    {
+        return $this->select('pasien.*')
+            ->join('jadwal', 'jadwal.id_pasien = pasien.id_pasien')
+            ->groupBy('pasien.id_pasien')
+            ->findAll();
     }
 }

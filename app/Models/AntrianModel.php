@@ -8,6 +8,7 @@ class AntrianModel extends Model
 {
     protected $table = 'antrian';
     protected $primaryKey = 'id_antrian';
+    protected $useTimestamps = true;
 
     protected $allowedFields = [
         'id_pasien',
@@ -20,20 +21,4 @@ class AntrianModel extends Model
         'id_jadwal',
         'keluhan'
     ];
-
-    protected $useTimestamps = true;
-    protected $returnType = 'array';
-
-    public function getAntrianLengkap()
-    {
-        return $this->select('antrian.*, pasien.nama as nama_pasien')
-            ->join('pasien', 'pasien.id_pasien = antrian.id_pasien')
-            ->orderBy('tanggal', 'DESC')
-            ->findAll();
-    }
-
-    public function getByTanggal($tanggal)
-    {
-        return $this->where('tanggal', $tanggal)->findAll();
-    }
 }
