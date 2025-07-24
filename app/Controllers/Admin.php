@@ -9,6 +9,7 @@ use App\Models\DokterModel;
 use App\Models\AdminModel;
 use App\Models\JadwalModel;
 use App\Models\AntrianModel;
+use App\Models\JadwalDokterModel;
 use CodeIgniter\Commands\Utilities\Publish;
 
 class Admin extends BaseController
@@ -223,5 +224,62 @@ class Admin extends BaseController
     {
         $this->dokterModel->delete($id);
         return redirect()->to('/admin/keloladokter')->with('sucess', 'Data pasien berhasil dihapus.');
+    }
+
+    // Untuk halaman mecari pasien
+
+    public function pasienTerjadwal()
+    {
+        $pasienModel = new PasienModel();
+        $keyword = $this->request->getGet('keyword');
+        $pasien = [];
+
+        if ($keyword) {
+            $pasien = $pasienModel
+                ->like('nama', $keyword)
+                ->orLike('no_RM', $keyword)
+                ->findAll();
+        }
+        return view('admin/pasienterjadwal', [
+            'pasien' => $pasien,
+        ]);
+    }
+
+    // Untuk halaman input jadwal pasien
+    public function tambahJadwalPasien($id_pasien)
+    {
+        $pasienModel = new PasienModel();
+        $jadwalDokterModel = new JadwalDokterModel();
+        $jadwalModel = new JadwalModel();
+
+        $pasien = $pasienModel->find($id_pasien);
+
+        if ($this->request->getMethod() === 'post') {
+            $tanggal = $this->request->getPost('tanggal_pemeriksaan');
+            $id_dokter = $this->request->getPost('id_dokter');
+            $pemeriksaan = $this->request->getPost('pemeriksaan');
+
+            $jadwalModel->insert([
+                'id_pasien' => $id_pasien,
+                'id_dokter' => $id_dokter,
+                'tanggal_pemeriksaan' => $tanggal,
+                'pemeriksaan' => $pemeriksaan,
+                'status' => 'terjadwal',
+            ]);
+
+            return redirect()->to('admin/pasienterjadwal')->with('success', 'Pasien berhasil dijadwalkan');
+        }
+
+        $dokter = [];
+        if ($this->request->getGet('tanggal')) {
+            $tanggal = $this->request->getGet('tanggal');
+            $dokter = $jadwalDokterModel->getDokterByTanggal($tanggal);
+        }
+
+        return view('admin/tambah_jadwal_pasien', [
+            'pasien' => $pasien,
+            'dokter' => $dokter,
+            'tanggal' => $tanggal ?? ''
+        ]);
     }
 }

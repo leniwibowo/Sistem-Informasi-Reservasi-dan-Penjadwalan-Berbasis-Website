@@ -70,3 +70,8 @@ $routes->get('/admin/simpandokter', 'Admin::simpanDokter', ['filter' => 'role:ad
 $routes->get('/admin/editdokter/(:num)', 'Admin::editDokter/$1', ['filter' => 'role:admin']);
 $routes->get('/admin/updatedokter/(:num)', 'Admin::updateDokter/$1', ['filter' => 'role:admin']);
 $routes->get('/admin/hapusdokter/(:num)', 'Admin::hapusDokter/$1', ['filter' => 'role:admin']);
+
+
+$routes->get('/admin/pasienterjadwal', 'Admin::pasienTerjadwal');
+$routes->get('/admin/tambahjadwalpasien/(:num)', 'Admin::tambahJadwalPasien/$1');
+$routes->post('/admin/tambahjadwalpasien/(:num)', 'Admin::tambahJadwalPasien/$1');
