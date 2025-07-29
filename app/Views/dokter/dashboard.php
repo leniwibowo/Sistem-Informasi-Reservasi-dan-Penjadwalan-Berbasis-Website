@@ -77,10 +77,10 @@
         <div class="row">
             <!-- Sidebar -->
             <nav class="col-md-2 sidebar py-4">
-                <a href="<?= base_url('/dokter/dashboard'); ?>">Dashboard</a>
-                <a href="<?= base_url('/dokter/antrian'); ?>">Antrian Pasien</a>
-                <a href="<?= base_url('/dokter/datapasien'); ?>">Data Pasien</a>
-                <a href="<?= base_url('/dokter/pasienterjadwal'); ?>">Pasien Terjadwal</a>
+                <a href="<?= base_url('dokter/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
+                <a href="<?= base_url('dokter/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
+                <a href="<?= base_url('dokter/datapasien') ?>"><i class="bi bi-person-lines-fill"></i> Data Pasien</a>
+                <a href="<?= base_url('dokter/pasienterjadwal') ?>"><i class="bi bi-easel2-fill"></i> Pasien Terjadwal</a>
             </nav>
 
             <!-- Main Content -->

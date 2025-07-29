@@ -36,11 +36,13 @@
         <div class="row">
             <!-- Sidebar -->
             <nav class="col-md-2 sidebar py-4">
-                <a href="<?= base_url('/admin/dashboard'); ?>">Dashboard</a>
-                <a href="<?= base_url('/admin/antrian'); ?>">Antrian Pasien</a>
-                <a href="<?= base_url('/admin/kelolapasien'); ?>">Kelola Data Pasien</a>
-                <a href="<?= base_url('/admin/keloladokter'); ?>">Kelola Dokter</a>
-                <a href="<?= base_url('/admin/pasienterjadwal'); ?>">Pasien Terjadwal</a>
+                <div class="sidebar">
+                    <a href="<?= base_url('/admin/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
+                    <a href="<?= base_url('/admin/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
+                    <a href="<?= base_url('/admin/kelolapasien') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Pasien</a>
+                    <a href="<?= base_url('/admin/keloladokter') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Dokter</a>
+                    <a href="<?= base_url('/admin/pasienterjadwal') ?>"><i class="bi-calendar-event-fill"></i> Pasien Terjadwal</a>
+
             </nav>
 
             <!-- Konten -->
@@ -52,7 +54,7 @@
                 <?php endif; ?>
 
                 <div class="d-flex justify-content-between mb-3">
-                    <a href="<?= base_url('/admin/tambahdoktern'); ?>" class="btn btn-primary">Tambah Dokter</a>
+                    <a href="<?= base_url('/admin/tambahdokter'); ?>" class="btn btn-primary">Tambah Dokter</a>
                     <form method="get" class="d-flex" action="<?= base_url('/admin/keloladokter'); ?>">
                         <input type="text" name="keyword" class="form-control me-2" placeholder="Cari nama">
                         <button type="submit" class="btn btn-outline-primary">Cari</button>

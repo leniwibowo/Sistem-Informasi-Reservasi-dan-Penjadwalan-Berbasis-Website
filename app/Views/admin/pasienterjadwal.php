@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Pasien Terjadwal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
     <style>
         body {
@@ -36,11 +37,12 @@
         <div class="row">
             <!-- Sidebar -->
             <nav class="col-md-2 sidebar py-4">
-                <a href="<?= base_url('/admin/dashboard'); ?>">Dashboard</a>
-                <a href="<?= base_url('/admin/antrian'); ?>">Antrian Pasien</a>
-                <a href="<?= base_url('/admin/kelolapasien'); ?>">Kelola Data Pasien</a>
-                <a href="<?= base_url('/admin/keloladokter'); ?>">Kelola Dokter</a>
-                <a href="<?= base_url('/admin/pasienterjadwal'); ?>">Pasien Terjadwal</a>
+                <a href="<?= base_url('/admin/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
+                <a href="<?= base_url('/admin/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
+                <a href="<?= base_url('/admin/kelolapasien') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Pasien</a>
+                <a href="<?= base_url('/admin/keloladokter') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Dokter</a>
+                <a href="<?= base_url('/admin/pasienterjadwal') ?>"><i class="bi-calendar-event-fill"></i> Pasien Terjadwal</a>
+
             </nav>
 
             <div class="col-md-10 p-4">

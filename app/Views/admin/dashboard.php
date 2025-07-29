@@ -77,18 +77,30 @@
         <div class="row">
             <!-- Sidebar -->
             <nav class="col-md-2 sidebar py-4">
-                <a href="<?= base_url('/admin/dashboard'); ?>">Dashboard</a>
-                <a href="<?= base_url('/admin/antrian'); ?>">Antrian Pasien</a>
-                <a href="<?= base_url('/admin/kelolapasien'); ?>">Kelola Pasien</a>
-                <a href="<?= base_url('/admin/kekoldokter'); ?>">Kelola Dokter</a>
-                <a href="<?= base_url('/admin/pasienterjadwal'); ?>">Pasien Terjadwal</a>
+                <div class="sidebar">
+                    <a href="<?= base_url('/admin/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
+                    <a href="<?= base_url('/admin/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
+                    <a href="<?= base_url('/admin/kelolapasien') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Pasien</a>
+                    <a href="<?= base_url('/admin/keloladokter') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Dokter</a>
+                    <a href="<?= base_url('/admin/pasienterjadwal') ?>"><i class="bi-calendar-event-fill"></i> Pasien Terjadwal</a>
+
+                </div>
             </nav>
 
             <!-- Main Content -->
             <div class="col-md-10">
                 <!-- Topbar -->
-                <div class="topbar">
-                    <i class="bi bi-person" style="font-size: 1.5rem;"></i>
+                <div class="topbar dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownProfile" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person" style="font-size: 1.5rem;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfile">
+                        <li><a class="dropdown-item" href="<?= base_url('/profil') ?>">Lihat Profil</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="<?= base_url('/logout') ?>">Logout</a></li>
+                    </ul>
                 </div>
 
                 <!-- Dashboard Content -->

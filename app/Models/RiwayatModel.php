@@ -21,11 +21,13 @@ class RiwayatModel extends Model
     public $useTimestamps = false;
 
     // ambil semua riwayat + nama dokter dan pasien
-    public function getRiwayatLengkap()
+    public function getRiwayatByPasien($id_pasien)
     {
-        return $this->select('riwayat_pemeriksaan.*, pasien.nama as nama_pasien, dokter.nama as nama_dokter')
-            ->join('pasien', 'pasien.id_pasien= riwayat_pemeriksaan.id_pasien')
+        return $this->select('riwayat_pemeriksaan.*, pasien.nama as nama_pasien, pasien.no_rm, pasien.jenis_kelamin, pasien.no_hp, pasien.tanggal_lahir, dokter.nama as nama_dokter')
+            ->join('pasien', 'pasien.id_pasien = riwayat_pemeriksaan.id_pasien')
             ->join('dokter', 'dokter.id_dokter = riwayat_pemeriksaan.id_dokter')
+            ->where('riwayat_pemeriksaan.id_pasien', $id_pasien)
+            ->orderBy('waktu', 'DESC')
             ->findAll();
     }
 }

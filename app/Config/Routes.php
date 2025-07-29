@@ -54,21 +54,23 @@ $routes->group('dokter', ['filter' => 'role:dokter'], function ($routes) {
 // role admin
 $routes->get('/admin/dashboard', 'Admin::index', ['filter' => 'role:admin']);
 $routes->get('/admin/antrian', 'Admin::Antrian', ['filter' => 'role:admin']);
-
+$routes->get('/profil', 'Admin::profil', ['filter' => 'role:admin']);
 
 $routes->get('/admin/kelolapasien', 'Admin::kelolaPasien', ['filter' => 'role:admin']);
 $routes->get('/admin/tambahpasien', 'Admin::tambahPasien', ['filter' => 'role:admin']);
 $routes->get('/admin/simpanpasien', 'Admin::simpanPasien', ['filter' => 'role:admin']);
 $routes->get('/admin/editpasien/(:num)', 'Admin::editPasien/$1', ['filter' => 'role:admin']);
 $routes->get('/admin/updatepasien/(:num)', 'Admin::updatePasien/$1', ['filter' => 'role:admin']);
+$routes->post('/admin/updatepasien/(:num)', 'Admin::updatePasien/$1', ['filter' => 'role:admin']);
 $routes->get('/admin/hapuspasien/(:num)', 'Admin::hapusPasien/$1', ['filter' => 'role:admin']);
-$routes->get('/admin/riwayatpemeriksaanpasien/(:num)', 'Admin::riwayatPemeriksaanPasien/$1', ['filter' => 'role:admin']);
+$routes->get('/admin/riwayatpemeriksaan/(:num)', 'Admin::riwayatPemeriksaanPasien/$1', ['filter' => 'role:admin']);
 
 $routes->get('/admin/keloladokter', 'Admin::kelolaDokter', ['filter' => 'role:admin']);
-$routes->get('/admin/tambahdokter', 'Admin::tambahDokter', ['filter' => 'role:admin']);
-$routes->get('/admin/simpandokter', 'Admin::simpanDokter', ['filter' => 'role:admin']);
+$routes->get('admin/tambahdokter', 'Admin::tambahDokter', ['filter' => 'role:admin']);
+$routes->post('admin/simpandokter', 'Admin::simpanDokter', ['filter' => 'role:admin']);
 $routes->get('/admin/editdokter/(:num)', 'Admin::editDokter/$1', ['filter' => 'role:admin']);
 $routes->get('/admin/updatedokter/(:num)', 'Admin::updateDokter/$1', ['filter' => 'role:admin']);
+$routes->post('/admin/updatedokter/(:num)', 'Admin::updateDokter/$1', ['filter' => 'role:admin']);
 $routes->get('/admin/hapusdokter/(:num)', 'Admin::hapusDokter/$1', ['filter' => 'role:admin']);
 
 

@@ -10,6 +10,8 @@ use App\Models\AdminModel;
 use App\Models\JadwalModel;
 use App\Models\AntrianModel;
 use App\Models\JadwalDokterModel;
+use App\Models\UserModel;
+use App\Models\RiwayatModel;
 use CodeIgniter\Commands\Utilities\Publish;
 
 class Admin extends BaseController
@@ -19,12 +21,19 @@ class Admin extends BaseController
     protected $jadwalModel;
     protected $pasienModel;
     protected $dokterModel;
+    protected $userModel;
+    protected $riwayatModel;
+    protected $adminModel;
+
     public function __construct()
     {
         $this->jadwalModel = new JadwalModel();
         $this->antrianModel = new AntrianModel();
         $this->pasienModel = new PasienModel();
         $this->dokterModel = new DokterModel();
+        $this->userModel = new UserModel();
+        $this->riwayatModel = new RiwayatModel();
+        $this->adminModel = new AdminModel();
     }
     public function index()
     {
@@ -124,40 +133,57 @@ class Admin extends BaseController
     public function updatePasien($id)
     {
         $data = [
-            'nik' => $this->request->getPost('nik'),
-            'no_RM' => $this->request->getPost('no_RM'),
             'nama' => $this->request->getPost('nama'),
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
             'no_hp' => $this->request->getPost('no_hp'),
             'alamat' => $this->request->getPost('alamat'),
-            'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
             'alergi' => $this->request->getPost('alergi'),
             'golongan_darah' => $this->request->getPost('golongan_darah'),
             'penyakit_jantung' => $this->request->getPost('penyakit_jantung'),
             'diabetes' => $this->request->getPost('diabetes'),
         ];
 
+        // Optional: Jika username boleh diubah
+        if ($this->request->getPost('username')) {
+            $data['username'] = $this->request->getPost('username');
+        }
+
+        // Optional: Jika password boleh diubah
+        if ($this->request->getPost('password')) {
+            $data['password'] = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
+        }
+
         $this->pasienModel->update($id, $data);
         return redirect()->to('/admin/kelolapasien')->with('success', 'Data pasien berhasil diubah.');
     }
 
+
     public function hapusPasien($id)
     {
-        $this->pasienModel->delete($id);
-        return redirect()->to('/admin/kelolapasien')->with('sucess', 'Data pasien berhasil dihapus.');
+        $pasien = $this->pasienModel->delete($id);
+        if ($pasien) {
+
+            // Hapus juga dari tabel users berdasarkan username yang sama
+            $this->userModel->where('username', $pasien['username'])->delete();
+
+            return redirect()->to('/admin/kelolapasien')->with('success', 'Data dokter berhasil dihapus.');
+        } else {
+            return redirect()->to('/admin/kelolapasien')->with('error', 'Data dokter tidak ditemukan.');
+        }
     }
 
-    public function riwayatPemeriksaanPasien($id)
+    public function riwayatPemeriksaanPasien($id_pasien)
     {
-        $riwayatPemeriksaanModel = new \App\Models\RiwayatModel();
-        $riwayatPemeriksaan = $riwayatPemeriksaanModel->where('id_pasien', $id)->findAll();
-        $pasien = $this->pasienModel->find($id);
+        $riwayatModel = new RiwayatModel();
+        $pasienModel = new PasienModel();
+
+        $riwayat = $riwayatModel->getRiwayatByPasien($id_pasien);
+        $pasien = $pasienModel->find($id_pasien);
 
         return view('admin/riwayatpemeriksaan', [
-            'title' => 'Riwayat Pemeriksaan Pasien',
-            'riwayatPemeriksaan' => $riwayatPemeriksaan,
+            'title' => 'Riwayat Pemeriksaan',
+            'riwayat' => $riwayat,
             'pasien' => $pasien
-
         ]);
     }
 
@@ -167,7 +193,7 @@ class Admin extends BaseController
         $keyword = $this->request->getGet('keyword');
 
         if ($keyword) {
-            $doker = $this->dokterModel
+            $dokter = $this->dokterModel
                 ->like('nama', $keyword)
                 ->findAll();
         } else {
@@ -179,7 +205,7 @@ class Admin extends BaseController
         ]);
     }
 
-    public function tambahDokterr()
+    public function tambahDokter()
     {
         return view('admin/tambahdokter', [
             'title' => 'Tambah Dokter'
@@ -188,15 +214,31 @@ class Admin extends BaseController
 
     public function simpanDokter()
     {
-        $data = [
+        // Ambil data dari form
+        $nama = $this->request->getPost('nama');
+        $no_hp = $this->request->getPost('no_hp');
+        $username = $this->request->getPost('username');
+        $password = $this->request->getPost('password');
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            'nama' => $this->request->getPost('nama'),
-            'no_hp' => $this->request->getPost('no_hp'),
-        ];
+        // Simpan ke tabel dokter
+        $this->dokterModel->insert([
+            'nama' => $nama,
+            'no_hp' => $no_hp,
+            'username' => $username,
+            'password' => $hashedPassword
+        ]);
 
-        $this->dokterModel->insert($data);
-        return redirect()->to('/admin/keloladokter')->with('success', 'Data pasien berhasi ditambahkan.');
+        // Simpan juga ke tabel users agar bisa login
+        $this->userModel->insert([
+            'username' => $username,
+            'password' => $hashedPassword,
+            'role' => 'dokter'
+        ]);
+
+        return redirect()->to('/admin/keloladokter')->with('success', 'Dokter berhasil ditambahkan dan bisa login.');
     }
+
 
     public function editDokter($id)
     {
@@ -209,22 +251,44 @@ class Admin extends BaseController
 
     public function updateDokter($id)
     {
+        // dd($this->request->getPost());
+
         $data = [
-
-            'nama' => $this->request->getPost('nama'),
-            'no_hp' => $this->request->getPost('no_hp'),
-
+            'nama'     => $this->request->getPost('nama'),
+            'no_hp'    => $this->request->getPost('no_hp'),
+            'username' => $this->request->getPost('username'),
         ];
 
+        $password = $this->request->getPost('password');
+        if (!empty($password)) {
+            $data['password'] = password_hash($password, PASSWORD_DEFAULT);
+        }
+
+
         $this->dokterModel->update($id, $data);
-        return redirect()->to('/admin/keloladokter')->with('success', 'Data pasien berhasil diubah.');
+
+        return redirect()->to('/admin/keloladokter')->with('success', 'Data dokter berhasil diubah.');
     }
+
 
     public function hapusDokter($id)
     {
-        $this->dokterModel->delete($id);
-        return redirect()->to('/admin/keloladokter')->with('sucess', 'Data pasien berhasil dihapus.');
+        // Ambil data dokter berdasarkan ID
+        $dokter = $this->dokterModel->find($id);
+
+        if ($dokter) {
+            // Hapus dari tabel dokter
+            $this->dokterModel->delete($id);
+
+            // Hapus juga dari tabel users berdasarkan username yang sama
+            $this->userModel->where('username', $dokter['username'])->delete();
+
+            return redirect()->to('/admin/keloladokter')->with('success', 'Data dokter berhasil dihapus.');
+        } else {
+            return redirect()->to('/admin/keloladokter')->with('error', 'Data dokter tidak ditemukan.');
+        }
     }
+
 
     // Untuk halaman mecari pasien
 
@@ -280,6 +344,25 @@ class Admin extends BaseController
             'pasien' => $pasien,
             'dokter' => $dokter,
             'tanggal' => $tanggal ?? ''
+        ]);
+    }
+
+    public function profil()
+    {
+        if (session()->get('role') !== 'admin') {
+            return redirect()->to('/login')->with('error', 'Silakan login sebagai admin.');
+        }
+
+        $userId = session()->get('id_admin'); // GANTI SESUAI YANG KAMU SIMPAN DI SESSION
+        $admin = $this->adminModel->find($userId);
+
+        if (!$admin) {
+            return redirect()->to('/dashboard')->with('error', 'Data admin tidak ditemukan.');
+        }
+
+        return view('admin/profil', [
+            'title' => 'Profil Admin',
+            'admin' => $admin
         ]);
     }
 }

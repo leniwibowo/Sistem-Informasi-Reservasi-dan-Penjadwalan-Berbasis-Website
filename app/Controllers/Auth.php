@@ -144,33 +144,3 @@ class Auth extends BaseController
         return redirect()->to('/login');
     }
 }
-
-
-
-// {
-        // $PasienModel = new PasienModel();
-
-        // $username = $this->request->getPost('username');
-        // $password = $this->request->getPost('password');
-
-        // cari data pasien
-        // $pasien = $PasienModel->where('username', $username)->first();
-
-        // if ($pasien) {
-            // cek password (jika belum has, langsung bandingkan)
-            // if ($password == $pasien['password']) {
-                // simpan data ke session
-                // session()->set([
-                    // 'id_pasien' => $pasien['id_pasien'],
-                    // 'nama'     => $pasien['nama'],
-                    // 'isLoggedIn' => true
-                // ]);
-                // return redirect()->to('/dashboard');
-            // } else {
-                // session()->setFlashdata('error', 'password salah!');
-                // return redirect()->to('/');
-            // }
-        // } else {
-            // session()->setFlashdata('error', 'Username tidak ditemukan!');
-            // return redirect()->to('/');
-        // }
