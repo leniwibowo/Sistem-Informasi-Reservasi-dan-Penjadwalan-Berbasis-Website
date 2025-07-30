@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\JadwalModel;
 use App\Models\PasienModel;
 use App\Models\AntrianModel;
+use App\Models\RiwayatModel;
 
 class Dokter extends BaseController
 {
@@ -14,11 +15,13 @@ class Dokter extends BaseController
     protected $antrianModel;
     protected $jadwalModel;
     protected $pasienModel;
+    protected $riwayatModel;
     public function __construct()
     {
         $this->jadwalModel = new JadwalModel();
         $this->antrianModel = new AntrianModel();
         $this->pasienModel = new PasienModel();
+        $this->riwayatModel = new RiwayatModel();
     }
 
     public function index()
@@ -48,7 +51,7 @@ class Dokter extends BaseController
     {
 
         $antrian = $this->antrianModel
-            ->select('antrian.*, jadwal.tanggal_pemeriksaan, dokter.nama as nama_dokter, pasien.nama as nama_pasien')
+            ->select('antrian.*, jadwal.tanggal_pemeriksaan, jadwal.status, dokter.nama as nama_dokter, pasien.nama as nama_pasien')
             ->join('jadwal', 'jadwal.id_jadwal = antrian.id_jadwal')
             ->join('dokter', 'dokter.id_dokter = jadwal.id_dokter')
             ->join('pasien', 'pasien.id_pasien = antrian.id_pasien')
@@ -105,7 +108,7 @@ class Dokter extends BaseController
 
     // logika pemeriksaan
 
-    public function priksa($id_jadwal)
+    public function Pemeriksaan($id_jadwal)
     {
         $jadwalModel = new \App\Models\JadwalModel();
         $pasienModel = new \App\Models\PasienModel();
@@ -127,6 +130,49 @@ class Dokter extends BaseController
             'pasien' => $pasien,
         ];
 
+
         return view('dokter/pemeriksaan', $data);
+    }
+
+    public function simpanPemeriksaan($id_jadwal)
+    {
+        $jadwal = $this->jadwalModel->find($id_jadwal);
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Jadwal tidak ditemukan.');
+        }
+
+        $diagnosis = $this->request->getPost('diagnosis');
+        $keluhan = $this->request->getPost('keluhan');
+        $resep = $this->request->getPost('resep');
+
+        // Simpan ke tabel riwayat_pemeriksaan
+        $this->riwayatModel->insert([
+            'id_pasien' => $jadwal['id_pasien'],
+            'id_dokter' => $jadwal['id_dokter'],
+            'waktu' => date('Y-m-d H:i:s'),
+            'diagnosis' => $diagnosis,
+            'keluhan' => $keluhan,
+            'resep' => $resep,
+        ]);
+
+        // Update status di tabel jadwal (misal: dari 'Menunggu' jadi 'Selesai')
+        $this->jadwalModel->update($id_jadwal, ['status' => 'Selesai']);
+
+        return redirect()->to('/dokter/antrian')->with('success', 'Pemeriksaan berhasil disimpan.');
+    }
+
+    public function riwayatPemeriksaanPasien($id_pasien)
+    {
+        $riwayatModel = new RiwayatModel();
+        $pasienModel = new PasienModel();
+
+        $riwayat = $riwayatModel->getRiwayatByPasien($id_pasien);
+        $pasien = $pasienModel->find($id_pasien);
+
+        return view('dokter/riwayatpemeriksaan', [
+            'title' => 'Riwayat Pemeriksaan',
+            'riwayat' => $riwayat,
+            'pasien' => $pasien
+        ]);
     }
 }

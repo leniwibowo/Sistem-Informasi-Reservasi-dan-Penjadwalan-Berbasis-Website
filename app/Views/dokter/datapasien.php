@@ -91,15 +91,17 @@
                                             <td class="text-center"><?= esc($p['nama']); ?></td>
                                             <td class="text-center"><?= esc($p['alamat']); ?></td>
                                             <td class="text-center"><?= esc($p['no_hp']); ?></td>
-                                            <td class="text-center"><?= esc($p['Jenis_kelamin']); ?></td>
+                                            <td class="text-center"><?= esc($p['jenis_kelamin']); ?></td>
                                             <td class="text-center"><?= date('d-m-y', strtotime($p['tanggal_lahir'])); ?></td>
-
-                                            <a href="<?= base_url('dokter/riwayat/' . $a['id_pasien']) ?>"
-                                                class="btn btn-sm btn-secondary"
-                                                title="Riwayat Pemeriksaan">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
+                                            <td class="text-center">
+                                                <a href="<?= base_url('dokter/riwayatpemeriksaan/' . $p['id_pasien']) ?>"
+                                                    class="btn btn-sm btn-secondary d-flex align-items-center justify-content-center"
+                                                    title="Riwayat Pemeriksaan"
+                                                    style="height: 30px; width: 30px; padding: 0;">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
                                             </td>
+
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else : ?>

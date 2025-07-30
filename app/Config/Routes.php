@@ -37,18 +37,13 @@ $routes->get('/profil', 'Pasien::profil'); //menampilkan profil pasien
 
 $routes->get('/dokter/dashboard', 'Dokter::index');
 $routes->get('/dokter/antrian', 'Dokter::antrian');
-$routes->get('dokter/periksa/(:num)', 'Dokter::priksa/$1');
+$routes->get('dokter/pemeriksaan/(:num)', 'Dokter::pemeriksaan/$1');
+$routes->post('dokter/pemeriksaan/(:num)', 'Dokter::simpanPemeriksaan/$1');
+$routes->get('dokter/riwayatpemeriksaan/(:num)', 'Dokter::riwayatPemeriksaanPasien/$1');
 $routes->get('/dokter/datapasien', 'Dokter::datapasien');
 $routes->get('/dokter/pasienterjadwal', 'Dokter::pasienterjadwal');
-$routes->group('dokter', ['filter' => 'role:dokter'], function ($routes) {
-    $routes->get('dashboard', 'DashboardDokter::index');
-});
-$routes->group('dokter', ['filter' => 'role:dokter'], function ($routes) {
-    $routes->get('datapasien', 'Dokter::datapasien');
-});
-$routes->group('dokter', ['filter' => 'role:dokter'], function ($routes) {
-    $routes->get('pasienterjadwal', 'Dokter::pasienterjadwal');
-});
+
+
 
 
 // role admin

@@ -54,16 +54,27 @@
         <div class="container mt-4">
             <h3>Riwayat Pemeriksaan Pasien</h3>
 
-            <!-- Biodata Pasien -->
-            <div class="card mb-4">
+            <div class="card mb-3">
                 <div class="card-body">
-                    <p><strong>Nama:</strong> <?= $pasien['nama'] ?? '-' ?></p>
-                    <p><strong>NIK:</strong> <?= $pasien['nik'] ?? '-' ?></p>
-                    <p><strong>No. RM:</strong> <?= $pasien['no_RM'] ?? '-' ?></p>
-                    <p><strong>Jenis Kelamin:</strong> <?= $pasien['jenis_kelamin'] ?? '-' ?></p>
-                    <p><strong>Tanggal Lahir:</strong> <?= $pasien['tanggal_lahir'] ?? '-' ?></p>
-                    <p><strong>No HP:</strong> <?= $pasien['no_hp'] ?? '-' ?></p>
-                    <p><strong>Alamat:</strong> <?= $pasien['alamat'] ?? '-' ?></p>
+                    <div class="row">
+                        <!-- Data Diri Pasien -->
+                        <div class="col-md-6">
+                            <h4>Data Diri Pasien</h4>
+                            <p class="mb-1"><strong>No RM:</strong> <?= esc($pasien['no_RM']) ?></p>
+                            <p class="mb-1"><strong>Nama:</strong> <?= esc($pasien['nama']) ?></p>
+                            <p class="mb-1"><strong>Tanggal Lahir:</strong> <?= date('d M Y', strtotime($pasien['tanggal_lahir'])) ?></p>
+                            <p class="mb-1"><strong>Jenis Kelamin:</strong> <?= esc($pasien['jenis_kelamin']) ?></p>
+                            <p class="mb-1"><strong>No Telepon:</strong> <?= esc($pasien['no_hp']) ?></p>
+                        </div>
+                        <!-- Data Medis Pasien -->
+                        <div class="col-md-6">
+                            <h4>Data Medis Pasien</h4>
+                            <p class="mb-1"><strong>Golongan Darah:</strong> <?= esc($pasien['golongan_darah']) ?></p>
+                            <p class="mb-1"><strong>Alergi:</strong> <?= esc($pasien['alergi']) ?></p>
+                            <p class="mb-1"><strong>Penyakit Jantung:</strong> <?= esc($pasien['penyakit_jantung']) ?></p>
+                            <p class="mb-1"><strong>Diabetes:</strong> <?= esc($pasien['diabetes']) ?></p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -94,7 +105,6 @@
                                             <td><?= $row['nama_dokter'] ?></td>
                                             <td><?= $row['keluhan'] ?></td>
                                             <td><?= $row['diagnosis'] ?></td>
-                                            <td><?= $row['pemeriksaan'] ?></td>
                                             <td><?= $row['resep'] ?></td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -106,7 +116,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <a href="<?= base_url('/admin/kelolapasien') ?>" class="btn btn-secondary mt-3">Kembali</a>
+                    <a href="<?= base_url('/admin/kelolapasien') ?>"></a>
                 </div>
             </div>
         </div>

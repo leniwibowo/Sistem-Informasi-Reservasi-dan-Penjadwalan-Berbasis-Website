@@ -72,7 +72,6 @@
                                     <td>No</td>
                                     <td>Nomor Antrian</td>
                                     <td>Nama Pasien</td>
-                                    <td>Jenis Kelamin</td>
                                     <td>Keluhan</td>
                                     <td>Status</td>
                                     <td>Aksi</td>
@@ -97,12 +96,12 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td class="text-center">
-                                                <a href="<?= base_url('dokter/periksa/' . $a['id_jadwal']) ?>"
+                                                <a href="<?= base_url('dokter/pemeriksaan/' . $a['id_jadwal']) ?>"
                                                     class="btn btn-sm btn-primary me-1"
                                                     title="Pemeriksaan Pasien">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </a>
-                                                <a href="<?= base_url('dokter/riwayat/' . $a['id_pasien']) ?>"
+                                                <a href="<?= base_url('dokter/riwayatpemeriksaan/' . $a['id_pasien']) ?>"
                                                     class="btn btn-sm btn-secondary"
                                                     title="Riwayat Pemeriksaan">
                                                     <i class="bi bi-eye"></i>

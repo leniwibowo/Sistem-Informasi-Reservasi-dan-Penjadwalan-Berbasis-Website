@@ -29,7 +29,7 @@ class Jadwal extends BaseController
         $session = session();
         $id_user = $session->get('id_user');
 
-        dd($id_user);
+
 
 
         $pasien = $this->pasienModel->where('id_user', $id_user)->first();
@@ -58,6 +58,7 @@ class Jadwal extends BaseController
             'id_dokter' => $dokter['id_dokter'],
             'id_pasien' => $pasien['id_pasien'],
             'tanggal_pemeriksaan' => $tanggal,
+            'keluhan' => $keluhan,
             'status' => 'Menunggu',
         ]);
         $id_jadwal = $this->jadwalModel->getInsertID();
