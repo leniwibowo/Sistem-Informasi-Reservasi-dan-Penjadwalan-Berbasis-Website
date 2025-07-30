@@ -18,7 +18,8 @@ class Antrian extends Migration
             ],
             'id_pasien' => [
                 'type' => 'INT',
-                'usigned' => true,
+                'unsigned' => true,
+
             ],
             'tanggal' => [
                 'type' => 'DATE',
@@ -39,11 +40,13 @@ class Antrian extends Migration
             ],
             'id_jadwal' => [
                 'type' => 'INT',
-                'usigned' => true
+                'unsigned' => true,
+
             ],
             'id_tanggal' => [
                 'type' => 'INT',
-                'usigned' => true
+                'unsigned' => true,
+
             ],
             'keluhan' => [
                 'type' => 'TEXT'
