@@ -3,8 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Profil Admin</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Dokter</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <style>
@@ -32,7 +31,7 @@
     </style>
 </head>
 
-<body>
+<body class="bg-light">
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
@@ -42,36 +41,42 @@
                 <a href="<?= base_url('/admin/kelolapasien') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Pasien</a>
                 <a href="<?= base_url('/admin/keloladokter') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Dokter</a>
                 <a href="<?= base_url('/admin/kelolaadmin') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Admin</a>
-                <a href="<?= base_url('/admin/pasienterjadwal') ?>"><i class="bi bi-calendar-event-fill"></i> Pasien Terjadwal</a>
-                <a href="<?= base_url('/admin/profil') ?>" class="fw-bold"><i class="bi bi-person-circle"></i> Profil</a>
+                <a href="<?= base_url('/admin/pasienterjadwal') ?>"><i class="bi-calendar-event-fill"></i> Pasien Terjadwal</a>
+
             </nav>
 
             <!-- Content -->
             <div class="col-md-10 p-4">
-                <div class="card shadow-sm rounded-4">
-                    <div class="card-header bg-dark text-white rounded-top-4">
-                        <h4 class="mb-0"><i class="bi bi-person-circle me-2"></i>Profil Admin</h4>
-                    </div>
+                <h2 class="mb-4 text-center">Tambah Admin Baru</h2>
+
+                <div class="card shadow-sm">
                     <div class="card-body">
-                        <div class="row mb-4">
-                            <div class="col-md-6 mb-3">
-                                <div class="card border-0 shadow-sm p-3 h-100">
-                                    <h5 class="text-primary border-bottom pb-2 mb-3">Data Admin</h5>
-                                    <p><strong>Nama:</strong> <?= esc($admin['nama']) ?></p>
-                                    <p><strong>Username:</strong> <?= esc($admin['username']) ?></p>
-                                </div>
+                        <form method="post" action="<?= base_url('/admin/simpanadmin'); ?>">
+                            <?= csrf_field(); ?>
+
+                            <div class="mb-3">
+                                <label for="nama" class="form-label">Nama Admin</label>
+                                <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama admin" required>
                             </div>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <a href="<?= base_url('/admin/dashboard') ?>" class="btn btn-secondary me-2">
-                                <i class="bi bi-arrow-left"></i> Kembali
-                            </a>
-                            <a href="<?= base_url('/logout') ?>" class="btn btn-danger">
-                                <i class="bi bi-box-arrow-right"></i> Logout
-                            </a>
-                        </div>
+
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" name="username" id="username" class="form-control" placeholder="Username login admin" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" name="password" id="password" class="form-control" placeholder="Password login admin" required>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <a href="<?= base_url('/admin/kelolaadmin'); ?>"></a>
+                                <button type="submit" class="btn btn-success">Simpan</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

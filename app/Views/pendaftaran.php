@@ -71,7 +71,7 @@
                 <a href="<?= base_url('/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
                 <a href="<?= base_url('/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Pendaftaran Pasien</a>
                 <a href="<?= base_url('/jadwal') ?>"><i class="bi bi-person-lines-fill"></i> Jadwal</a>
-                <a href="<?= base_url('/riwayat') ?>"><i class="bi bi-easel2-fill"></i> Riwayat</a>
+                <a href="<?= base_url('/riwayat_pemeriksaan') ?>"><i class="bi bi-easel2-fill"></i> Riwayat</a>
             </nav>
 
             <!-- main content -->

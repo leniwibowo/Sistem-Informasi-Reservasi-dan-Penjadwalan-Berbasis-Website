@@ -48,15 +48,15 @@
 
             <!-- Konten -->
             <div class="col-md-10 p-4">
-                <h3 class="mb-4 text-center">Kelola Data Dokter</h3>
+                <h3 class="mb-4 text-center">Kelola Data Admin</h3>
 
                 <?php if (session()->getFlashdata('success')) : ?>
                     <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
                 <?php endif; ?>
 
                 <div class="d-flex justify-content-between mb-3">
-                    <a href="<?= base_url('/admin/tambahdokter'); ?>" class="btn btn-primary">Tambah Dokter</a>
-                    <form method="get" class="d-flex" action="<?= base_url('/admin/keloladokter'); ?>">
+                    <a href="<?= base_url('/admin/tambahadmin'); ?>" class="btn btn-primary">Tambah Admin</a>
+                    <form method="get" class="d-flex" action="<?= base_url('/admin/kelolaadmin'); ?>">
                         <input type="text" name="keyword" class="form-control me-2" placeholder="Cari nama">
                         <button type="submit" class="btn btn-outline-primary">Cari</button>
                     </form>
@@ -69,26 +69,23 @@
                                 <th>No</th>
 
                                 <th>Nama</th>
-                                <th>No HP</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if (!empty($dokter)) : ?>
+                            <?php if (!empty($admin)) : ?>
                                 <?php $no = 1;
-                                foreach ($dokter as $d) : ?>
+                                foreach ($admin as $a) : ?>
                                     <tr>
                                         <td class="text-center"><?= $no++ ?></td>
-                                        <td><?= esc($d['nama']) ?></td>
-                                        <td><?= esc($d['no_hp']) ?></td>
-
+                                        <td><?= esc($a['nama']) ?></td>
                                         <td class="text-center">
-                                            <a href="<?= base_url('admin/editdokter/' . $d['id_dokter']) ?>"
+                                            <a href="<?= base_url('admin/editadmin/' . $a['id_admin']) ?>"
                                                 class="btn btn-sm btn-info me-1"
                                                 title="Edit">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
-                                            <a href="<?= base_url('admin/hapusdokter/' . $d['id_dokter']) ?>"
+                                            <a href="<?= base_url('admin/hapusdokter/' . $a['id_admin']) ?>"
                                                 class="btn btn-sm btn-danger"
                                                 title="Hapus">
                                                 <i class="bi bi-trash"></i>

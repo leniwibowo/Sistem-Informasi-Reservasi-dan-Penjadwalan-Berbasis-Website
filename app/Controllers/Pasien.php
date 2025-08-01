@@ -43,11 +43,18 @@ class Pasien extends BaseController
 
     public function RiwayatPemeriksaan()
     {
-        $id_pasien = session()->get('id_pasien'); // Ambil ID pasien yang sedang login
+
+
+        $id_user = session()->get('id_user'); // Ambil ID pasien yang sedang login
+
+        // Cari id_pasien berdasarkan id_user
+        $pasien = $this->pasienModel->where('id_user', $id_user)->first();
+        $id_pasien = $pasien['id_pasien'] ?? null;
 
         if (!$id_pasien) {
             return redirect()->to('/login')->with('error', 'Silakan login terlebih dahulu.');
         }
+
 
         $riwayat = $this->riwayatModel
             ->select('riwayat_pemeriksaan.*, dokter.nama as nama_dokter')
@@ -56,7 +63,7 @@ class Pasien extends BaseController
             ->orderBy('waktu', 'DESC')
             ->findAll();
 
-        return view('pasien/riwayat', [
+        return view('riwayat_pemeriksaan', [
             'title' => 'Riwayat Pemeriksaan',
             'riwayat' => $riwayat
         ]);

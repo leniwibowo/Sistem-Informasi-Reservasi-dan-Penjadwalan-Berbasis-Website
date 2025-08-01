@@ -121,8 +121,8 @@ class Dokter extends BaseController
         }
 
         // ambil data pasien terkait
-        $jadwal = $this->jadwalModel->where('id_jadwal', $id_jadwal)->first();
-        $pasien = $this->pasienModel->where('id_pasien', $jadwal['id_pasien'])->first();
+        $jadwal = $jadwalModel->where('id_jadwal', $id_jadwal)->first();
+        $pasien = $pasienModel->where('id_pasien', $jadwal['id_pasien'])->first();
 
         $data = [
             'title' => 'Pemeriksaan Pasien',

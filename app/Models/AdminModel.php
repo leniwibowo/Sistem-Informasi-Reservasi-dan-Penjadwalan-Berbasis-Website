@@ -9,9 +9,10 @@ class AdminModel extends Model
     protected $table = 'admin';   //nama tabel
     protected $primaryKey = 'id_admin';
 
-    protected $allowedFields = ['id_pasien', 'id_jadwal', 'keluhan', 'nomor_antrian', 'status'];
+    protected $allowedFields = ['nama', 'username', 'password'];
 
-    protected $useTimestamps = true;
+
+    protected $useTimestamps = false;
 
     public function getByUsername($username)
     {

@@ -5,6 +5,7 @@ namespace App\Models;
 use CodeIgniter\Model;
 
 class JadwalModel extends Model
+
 {
     protected $table = 'jadwal'; //nama tabel
     protected $primaryKey = 'id_jadwal';
@@ -15,7 +16,8 @@ class JadwalModel extends Model
         'tanggal_pemeriksaan',
         'status',
         'pemeriksaan',
-        'created_ad'
+        'created_ad',
+        'keluhan'
     ];
     protected $useTimestamps = true;
 
@@ -48,13 +50,13 @@ class JadwalModel extends Model
             ->findAll();
     }
 
-    public function getAllPasienTerdaftar()
-    {
-        return $this
-            ->select('jadwal.*, pasien.no_RM, pasien.nama as nama_pasien, dokter.nama as nama_dokter')
-            ->join('dokter', 'dokter.id_dokter = jadwal.id_dokter')
-            ->join('pasien', 'pasien.id_pasien = jadwal.id_pasien')
-            ->orderBy('jadwal.tanggal_pemeriksaan', date('Y-m-d'))
-            ->findAll();
-    }
+    // public function getAntrianHariIni()
+    // {
+    //     return $this->db->table('antrian')
+    //         ->select('antrian.*, pasien.nama as nama_pasien, pasien.no_RM')
+    //         ->join('pasien', 'pasien.id_pasien = antrian.id_pasien')
+    //         ->where('antrian.tanggal', date('Y-m-d'))
+    //         ->orderBy('antrian.no_antrian', 'ASC')
+    //         ->get()->getResultArray();
+    // }
 }

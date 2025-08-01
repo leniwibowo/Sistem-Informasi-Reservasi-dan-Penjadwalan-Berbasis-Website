@@ -50,26 +50,21 @@
 
             <!-- Content -->
             <div class="col-md-10 p-4">
-                <h2 class="mb-4 text-center">Edit Data Dokter</h2>
+                <h2 class="mb-4 text-center">Edit Data Admin</h2>
 
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <form method="post" action="<?= base_url('/admin/updatedokter/' . $dokter['id_dokter']); ?>">
+                        <form method="post" action="<?= base_url('/admin/updateadmin/' . $admin['id_admin']); ?>">
                             <?= csrf_field(); ?>
 
                             <div class="mb-3">
-                                <label for="nama" class="form-label">Nama Dokter</label>
-                                <input type="text" name="nama" id="nama" class="form-control" value="<?= esc($dokter['nama']) ?>" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="no_hp" class="form-label">No HP</label>
-                                <input type="text" name="no_hp" id="no_hp" class="form-control" value="<?= esc($dokter['no_hp']) ?>" required>
+                                <label for="nama" class="form-label">Nama Admin</label>
+                                <input type="text" name="nama" id="nama" class="form-control" value="<?= esc($admin['nama']) ?>" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
-                                <input type="text" name="username" id="username" class="form-control" value="<?= esc($dokter['username']) ?>" required>
+                                <input type="text" name="username" id="username" class="form-control" value="<?= esc($admin['username']) ?>" required>
                             </div>
 
                             <div class="mb-3">
@@ -78,7 +73,7 @@
                             </div>
 
                             <div class="d-flex justify-content-between">
-                                <a href="<?= base_url('/admin/keloladokter'); ?>" class="btn btn-secondary">Kembali</a>
+                                <a href="<?= base_url('/admin/kelolaadmin'); ?>"></a>
                                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                             </div>
                         </form>

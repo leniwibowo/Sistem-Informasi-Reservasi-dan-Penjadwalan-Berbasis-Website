@@ -24,7 +24,8 @@ $routes->post('/antrian/simpan', 'Antrian::simpan'); //menyimpan halaman antrian
 $routes->get('/jadwal', 'Jadwal::index'); //halaman utama jadwal
 $routes->post('jadwal/simpan', 'Jadwal::simpan'); //simpan jadwal
 $routes->get('/jadwal/reschedule/(:num)', 'Jadwal::reschadyle/$1'); //untuk mengubah status jadi hadir
-$routes->get('/riwayat', 'RiwayatPemeriksaan::index'); // menampilkan halaman riwayat pemeriksaan
+$routes->get('/riwayat_pemeriksaan', 'Pasien::RiwayatPemeriksaan');
+// menampilkan halaman riwayat pemeriksaan
 $routes->get('/profil', 'Pasien::profil'); //menampilkan profil pasien
 
 
@@ -51,6 +52,8 @@ $routes->get('/admin/dashboard', 'Admin::index', ['filter' => 'role:admin']);
 $routes->get('/admin/antrian', 'Admin::Antrian', ['filter' => 'role:admin']);
 $routes->get('/profil', 'Admin::profil', ['filter' => 'role:admin']);
 
+
+// kelola pasien
 $routes->get('/admin/kelolapasien', 'Admin::kelolaPasien', ['filter' => 'role:admin']);
 $routes->get('/admin/tambahpasien', 'Admin::tambahPasien', ['filter' => 'role:admin']);
 $routes->get('/admin/simpanpasien', 'Admin::simpanPasien', ['filter' => 'role:admin']);
@@ -59,7 +62,8 @@ $routes->get('/admin/updatepasien/(:num)', 'Admin::updatePasien/$1', ['filter' =
 $routes->post('/admin/updatepasien/(:num)', 'Admin::updatePasien/$1', ['filter' => 'role:admin']);
 $routes->get('/admin/hapuspasien/(:num)', 'Admin::hapusPasien/$1', ['filter' => 'role:admin']);
 $routes->get('/admin/riwayatpemeriksaan/(:num)', 'Admin::riwayatPemeriksaanPasien/$1', ['filter' => 'role:admin']);
-
+$routes->get('admin/antrian/lewati/(:num)', 'Admin::lewati/$1');
+// kelola dokter
 $routes->get('/admin/keloladokter', 'Admin::kelolaDokter', ['filter' => 'role:admin']);
 $routes->get('admin/tambahdokter', 'Admin::tambahDokter', ['filter' => 'role:admin']);
 $routes->post('admin/simpandokter', 'Admin::simpanDokter', ['filter' => 'role:admin']);
@@ -68,7 +72,17 @@ $routes->get('/admin/updatedokter/(:num)', 'Admin::updateDokter/$1', ['filter' =
 $routes->post('/admin/updatedokter/(:num)', 'Admin::updateDokter/$1', ['filter' => 'role:admin']);
 $routes->get('/admin/hapusdokter/(:num)', 'Admin::hapusDokter/$1', ['filter' => 'role:admin']);
 
+// kelola admin
+$routes->get('/admin/kelolaadmin', 'Admin::kelolaAdmin', ['filter' => 'role:admin']);
+$routes->get('admin/tambahadmin', 'Admin::tambahAdmin', ['filter' => 'role:admin']);
+$routes->post('admin/simpanadmin', 'Admin::simpanAdmin', ['filter' => 'role:admin']);
+$routes->get('/admin/editadmin/(:num)', 'Admin::editAdmin/$1', ['filter' => 'role:admin']);
+$routes->get('/admin/updateadmin/(:num)', 'Admin::updateAdmin/$1', ['filter' => 'role:admin']);
+$routes->post('/admin/updateadmin/(:num)', 'Admin::updateAdmin/$1', ['filter' => 'role:admin']);
+$routes->get('/admin/hapusadmin/(:num)', 'Admin::hapusAdmin/$1', ['filter' => 'role:admin']);
 
+
+// halaman pasien terjadwal
 $routes->get('/admin/pasienterjadwal', 'Admin::pasienTerjadwal');
 $routes->get('/admin/tambahjadwalpasien/(:num)', 'Admin::tambahJadwalPasien/$1');
 $routes->post('/admin/tambahjadwalpasien/(:num)', 'Admin::tambahJadwalPasien/$1');

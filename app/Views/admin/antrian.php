@@ -55,6 +55,7 @@
                     <a href="<?= base_url('/admin/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
                     <a href="<?= base_url('/admin/kelolapasien') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Pasien</a>
                     <a href="<?= base_url('/admin/keloladokter') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Dokter</a>
+                    <a href="<?= base_url('/admin/kelolaadmin') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Admin</a>
                     <a href="<?= base_url('/admin/pasienterjadwal') ?>"><i class="bi-calendar-event-fill"></i> Pasien Terjadwal</a>
 
                 </div>
@@ -69,9 +70,6 @@
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover align-middle">
                             <thead class="table-dark">
-
-
-
                                 <tr class="text-center">
                                     <td>No</td>
                                     <td>Nomor Antrian</td>
@@ -84,37 +82,46 @@
 
                             </thead>
                             <tbody>
-                                <?php if (!empty($antrian)) : ?>
+                                <?php if (!empty($pasienTerdaftar)) : ?>
                                     <?php $no = 1;
                                     foreach ($pasienTerdaftar as $pasien) : ?>
                                         <tr>
                                             <td class="text-center"><?= $no++ ?></td>
                                             <td class="text-center"><?= esc($pasien['id_antrian']) ?></td>
                                             <td><?= esc($pasien['nama_pasien']) ?></td>
-                                            <td><?= date('l, d F Y', strtotime($pasien['tanggal_pemeriksaan'])); ?></td>
+                                            <td><?= date('l, d F Y', strtotime($pasien['tanggal'])); ?></td>
                                             <td class="text-center">
-                                                <?php if ($pasien['status'] === 'Menunggu') : ?>
+                                                <?php if ($pasien['status'] === 'Menunggu'): ?>
                                                     <span class="badge bg-warning text-dark">Menunggu</span>
-                                                <?php else : ?>
-                                                    <span class="badge bg-success">Sudah Diperiksa</span>
+                                                <?php elseif ($pasien['status'] === 'Tidak Hadir'): ?>
+                                                    <span class="badge bg-danger">Tidak Hadir</span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-success">Hadir</span>
                                                 <?php endif; ?>
+
                                             </td>
                                             <td class="text-center">
-                                                <a href="<?= base_url('admin/updatepasien/' . $a['id_jadwal']) ?>"
+                                                <a href="<?= base_url('admin/updatepasien/' . $pasien['id_jadwal']) ?>"
                                                     class="btn btn-sm btn-info me-1"
                                                     title="Pemeriksaan Pasien">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </a>
-                                                <a href="<?= base_url('admin/riwayat/' . $a['id_pasien']) ?>"
+                                                <a href="<?= base_url('admin/riwayatpemeriksaan/' . $pasien['id_pasien']) ?>"
                                                     class="btn btn-sm btn-warning"
                                                     title="Riwayat Pemeriksaan">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
-                                                <a href="<?= base_url('admin/profil/' . $a['id_pasien']) ?>"
+                                                <a href="<?= base_url('admin/profil/' . $pasien['id_pasien']) ?>"
                                                     class="btn btn-sm btn-primary"
                                                     title="Data Pasien">
                                                     <i class="bi bi-person"></i>
                                                 </a>
+                                                <a href="<?= base_url('admin/antrian/lewati/' . $pasien['id_antrian']) ?>"
+                                                    class="btn btn-danger btn-sm"
+                                                    title="Lewati Pasien">
+                                                    <i class="fas fa-forward"></i>
+                                                </a>
+
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -131,8 +138,6 @@
                 </div>
 
             </div>
-
-
 
         </div>
     </div>

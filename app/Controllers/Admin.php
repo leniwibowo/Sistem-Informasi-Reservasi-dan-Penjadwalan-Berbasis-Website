@@ -60,6 +60,7 @@ class Admin extends BaseController
         ]);
     }
 
+    // LOGIKA UNTUK ANTRIAN DIHALAMAN ADMIN
     public function Antrian()
     {
 
@@ -68,13 +69,27 @@ class Admin extends BaseController
             return redirect()->to('/login')->with('error', 'Silahkan login sebagai admin.');
         };
 
-        $pasinTerdaftar = $this->jadwalModel->getAllPasienTerdaftar();
+        $pasinTerdaftar = $this->antrianModel->getAntrianHariIni();
 
 
         return view('/admin/antrian', [
             'pasienTerdaftar' => $pasinTerdaftar
         ]);
     }
+
+    public function lewati($id_antrian)
+    {
+        $antrianModel = new \App\Models\AntrianModel();
+
+        // Update status menjadi Tidak Hadir
+        $antrianModel->update($id_antrian, [
+            'status' => 'Tidak Hadir'
+        ]);
+
+        return redirect()->to('/admin/antrian')->with('success', 'Pasien telah dilewati.');
+    }
+
+    // LOGIKA UNTUK KELOLA DATA PASIEN (ADMIN)
 
     public function kelolaPasien()
     {
@@ -94,13 +109,15 @@ class Admin extends BaseController
         ]);
     }
 
+    // LOGIKA TAMBAH PASIEN (ADMIN)
+
     public function tambahPasien()
     {
         return view('admin/tambahpasien', [
             'title' => 'Tambah Pasien'
         ]);
     }
-
+    // LOGIKA SIMPAN PASIEN (ADMIN)
     public function simpanPasien()
     {
         $data = [
@@ -121,6 +138,8 @@ class Admin extends BaseController
         return redirect()->to('/admin/kelolapasien')->with('success', 'Data pasien berhasi ditambahkan.');
     }
 
+    // LOGIKA EDIT PASIEN (ADMIN)
+
     public function editPasien($id)
     {
         $pasien = $this->pasienModel->find($id);
@@ -129,6 +148,8 @@ class Admin extends BaseController
             'pasien' => $pasien
         ]);
     }
+
+    // LOGIKA UPDATE PASIEN SETELAH MENGEDIT (ADMIN)
 
     public function updatePasien($id)
     {
@@ -157,6 +178,7 @@ class Admin extends BaseController
         return redirect()->to('/admin/kelolapasien')->with('success', 'Data pasien berhasil diubah.');
     }
 
+    // LOGIKA UNTUK MENGHAPUS DATA PASIEN
 
     public function hapusPasien($id)
     {
@@ -171,6 +193,8 @@ class Admin extends BaseController
             return redirect()->to('/admin/kelolapasien')->with('error', 'Data dokter tidak ditemukan.');
         }
     }
+
+    // LOGIKA HALAMAN RIWAYAT PEMERIKSAAN PASIEN (ADMIN)
 
     public function riwayatPemeriksaanPasien($id_pasien)
     {
@@ -187,7 +211,7 @@ class Admin extends BaseController
         ]);
     }
 
-
+    //  LOGIKA KELOLA DATA DOKTER (ADMIN)
     public function kelolaDokter()
     {
         $keyword = $this->request->getGet('keyword');
@@ -204,14 +228,14 @@ class Admin extends BaseController
             'dokter' => $dokter
         ]);
     }
-
+    // LOGIKA TAMBAH DOKTER (ADMIN)
     public function tambahDokter()
     {
         return view('admin/tambahdokter', [
             'title' => 'Tambah Dokter'
         ]);
     }
-
+    // LOGIKA SIMPAN DOKTER (ADMIN)
     public function simpanDokter()
     {
         // Ambil data dari form
@@ -239,7 +263,7 @@ class Admin extends BaseController
         return redirect()->to('/admin/keloladokter')->with('success', 'Dokter berhasil ditambahkan dan bisa login.');
     }
 
-
+    // LOGIKA EDIT DOKTER
     public function editDokter($id)
     {
         $dokter = $this->dokterModel->find($id);
@@ -249,9 +273,9 @@ class Admin extends BaseController
         ]);
     }
 
+    // LOGIKA UNTUK UPDATE DATA DOKTER (ADMIN)
     public function updateDokter($id)
     {
-        // dd($this->request->getPost());
 
         $data = [
             'nama'     => $this->request->getPost('nama'),
@@ -269,8 +293,7 @@ class Admin extends BaseController
 
         return redirect()->to('/admin/keloladokter')->with('success', 'Data dokter berhasil diubah.');
     }
-
-
+    // LOGIKA HAPUS DATA DOKTER (ADMIN)
     public function hapusDokter($id)
     {
         // Ambil data dokter berdasarkan ID
@@ -288,6 +311,118 @@ class Admin extends BaseController
             return redirect()->to('/admin/keloladokter')->with('error', 'Data dokter tidak ditemukan.');
         }
     }
+
+
+    // LOGIKA KELOLA DATA ADMIN
+    public function kelolaAdmin()
+    {
+
+        $keyword = $this->request->getGet('keyword');
+
+        if ($keyword) {
+            $admin = $this->adminModel
+                ->like('nama', $keyword)
+                ->findAll();
+        } else {
+            $admin = $this->adminModel->findAll();
+        }
+        return view('admin/kelolaadmin', [
+            'title' => 'Kelola Data Admin',
+            'admin' => $admin
+        ]);
+    }
+    // LOGIKA TAMBAH DOKTER (ADMIN)
+    public function tambahAdmin()
+    {
+        return view('admin/tambahadmin', [
+            'title' => 'Tambah Admin'
+        ]);
+    }
+    // LOGIKA SIMPAN DOKTER (ADMIN)
+    public function simpanAdmin()
+    {
+        $nama = $this->request->getPost('nama');
+        $username = $this->request->getPost('username');
+        $password = $this->request->getPost('password');
+
+        // Cek apakah semua data ada
+        if (!$nama || !$username || !$password) {
+            return redirect()->back()->with('error', 'Data tidak lengkap!');
+        }
+
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Simpan ke tabel admin
+        $this->adminModel->insert([
+            'nama'     => $nama,
+            'username' => $username,
+            'password' => $hashedPassword
+        ]);
+
+        // Simpan ke tabel users
+        $this->userModel->insert([
+            'username' => $username,
+            'password' => $hashedPassword,
+            'role'     => 'admin'
+        ]);
+
+        return redirect()->to('/admin/kelolaadmin')->with('success', 'Admin berhasil ditambahkan.');
+    }
+
+
+
+
+
+    // LOGIKA EDIT DOKTER
+    public function editAdmin($id)
+    {
+        $admin = $this->adminModel->find($id);
+
+        if (!$admin) {
+            return redirect()->to('/admin/kelolaadmin')->with('error', 'Admin tidak ditemukan.');
+        }
+
+        return view('admin/editadmin', ['admin' => $admin]);
+    }
+
+    // LOGIKA UNTUK UPDATE DATA DOKTER (ADMIN)
+    public function updateAdmin($id)
+    {
+
+        $data = [
+            'nama'     => $this->request->getPost('nama'),
+            'username' => $this->request->getPost('username'),
+        ];
+
+        $password = $this->request->getPost('password');
+        if (!empty($password)) {
+            $data['password'] = password_hash($password, PASSWORD_DEFAULT);
+        }
+
+
+        $this->adminModel->update($id, $data);
+
+        return redirect()->to('/admin/kelolaadmin')->with('success', 'Data dokter berhasil diubah.');
+    }
+    // LOGIKA HAPUS DATA DOKTER (ADMIN)
+    public function hapusAdmin($id)
+    {
+        // Ambil data dokter berdasarkan ID
+        $admin = $this->adminModel->find($id);
+
+        if ($admin) {
+            // Hapus dari tabel dokter
+            $this->adminModel->delete($id);
+
+            // Hapus juga dari tabel users berdasarkan username yang sama
+            $this->userModel->where('username', $admin['username'])->delete();
+
+            return redirect()->to('/admin/kelolaadmin')->with('success', 'Data dokter berhasil dihapus.');
+        } else {
+            return redirect()->to('/admin/kelolaadmin')->with('error', 'Data dokter tidak ditemukan.');
+        }
+    }
+
 
 
     // Untuk halaman mecari pasien
