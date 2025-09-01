@@ -1,134 +1,112 @@
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->extend('templates/dokter_layout') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Daftar Antrian Pasien</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <style>
-        body {
-            background-color: #F2F2F2;
-        }
+<?= $this->section('title') ?>
+Data Pasien
+<?= $this->endSection() ?>
 
-        .sidebar {
-            background-color: #ffffff;
-            min-height: 100vh;
-        }
+<?= $this->section('content') ?>
 
-        .sidebar a {
-            display: block;
-            padding: 1rem;
-            color: #000;
-            text-decoration: none;
-            font-weight: 500;
-        }
+<div class="flex flex-col sm:flex-row justify-between items-start mb-6">
+    <div>
+        <h1 class="text-3xl font-bold text-gray-900">Manajemen Data Pasien</h1>
+        <p class="mt-1 text-gray-500">Cari, lihat, dan kelola semua data pasien yang terdaftar di klinik.</p>
+    </div>
+</div>
 
-        .sidebar a:hover {
-            background-color: #F2F2F2;
-            border-radius: 8px;
-        }
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
 
-        .topbar {
-            height: 60px;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 0 20px;
-            margin-top: 10px;
-            border-radius: 8px;
-        }
-
-        .card-icon {
-            font-size: 2rem;
-        }
-    </style>
-</head>
-
-<body class="bg-light">
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 sidebar py-4">
-                <a href="<?= base_url('dokter/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
-                <a href="<?= base_url('dokter/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
-                <a href="<?= base_url('dokter/datapasien') ?>"><i class="bi bi-person-lines-fill"></i> Data Pasien</a>
-                <a href="<?= base_url('dokter/pasienterjadwal') ?>"><i class="bi bi-easel2-fill"></i> Pasien Terjadwal</a>
-            </nav>
-            <div class="col md-10">
-                <div class="topbar">
-                    <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-                </div>
-                <div class="container mt-4">
-                    <h3 class="mb-4 text-center">Data Pasien</h3>
-
-                    <div class="table-responsive mt-3">
-                        <table class="table table-bordered table-hover align-middle">
-                            <thead class="table-dark">
-
-
-
-                                <tr class="text-center">
-                                    <td>No</td>
-                                    <td>no_RM</td>
-                                    <td>Nama Pasien</td>
-                                    <td>Alamat</td>
-                                    <td>No Hp</td>
-                                    <td>Jenis Kelamin</td>
-                                    <td>Tanggal Lahir</td>
-                                    <td>Aksi</td>
-
-                                </tr>
-
-                            </thead>
-                            <tbody>
-                                <?php if (!empty($pasien)) : ?>
-                                    <?php $no = 1;
-                                    foreach ($pasien as $p) : ?>
-                                        <tr>
-                                            <td class="text-center"><?= $no++ ?></td>
-                                            <td class="text-center"><?= esc($p['no_RM']); ?></td>
-                                            <td class="text-center"><?= esc($p['nama']); ?></td>
-                                            <td class="text-center"><?= esc($p['alamat']); ?></td>
-                                            <td class="text-center"><?= esc($p['no_hp']); ?></td>
-                                            <td class="text-center"><?= esc($p['jenis_kelamin']); ?></td>
-                                            <td class="text-center"><?= date('d-m-y', strtotime($p['tanggal_lahir'])); ?></td>
-                                            <td class="text-center">
-                                                <a href="<?= base_url('dokter/riwayatpemeriksaan/' . $p['id_pasien']) ?>"
-                                                    class="btn btn-sm btn-secondary d-flex align-items-center justify-content-center"
-                                                    title="Riwayat Pemeriksaan"
-                                                    style="height: 30px; width: 30px; padding: 0;">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                            </td>
-
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else : ?>
-                                    <tr>
-                                        <td colspan="6" class="text-center text-muted py-4">
-                                            <i class="bi bi-info-circle"></i> Belum ada pasien yang melakukan pemeriksaan.
-                                        </td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-
-
-
-        </div>
+    <!-- Tabel untuk desktop -->
+    <div class="overflow-x-auto hidden lg:block">
+        <table class="w-full text-sm text-left text-gray-600">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-4">Nama Pasien</th>
+                    <th scope="col" class="px-6 py-4">Alamat</th>
+                    <th scope="col" class="px-6 py-4">Kontak</th>
+                    <th scope="col" class="px-6 py-4">Tanggal Lahir</th>
+                    <th scope="col" class="px-6 py-4 text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($pasien)) : ?>
+                    <?php foreach ($pasien as $p) : ?>
+                        <tr class="bg-white border-b hover:bg-gray-50 transition-colors duration-150">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center space-x-3">
+                                    <img class="object-cover w-10 h-10 rounded-full" src="https://ui-avatars.com/api/?name=<?= urlencode($p['nama']) ?>&background=e0f2fe&color=0369a1" alt="Avatar">
+                                    <div>
+                                        <p class="font-semibold text-gray-900"><?= esc($p['nama']); ?></p>
+                                        <p class="text-xs text-gray-500">No. RM: <?= esc($p['no_RM']); ?></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4"><?= esc($p['alamat']); ?></td>
+                            <td class="px-6 py-4"><?= esc($p['no_hp']); ?></td>
+                            <td class="px-6 py-4"><?= date('d F Y', strtotime($p['tanggal_lahir'])); ?></td>
+                            <td class="px-6 py-4 text-center">
+                                <a href="<?= base_url('dokter/riwayatpemeriksaan/' . $p['id_pasien']) ?>" class="inline-flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg">
+                                    <i class="bi bi-eye-fill w-5 mr-2"></i> Lihat Riwayat
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <tr>
+                        <td colspan="5" class="text-center py-12 px-6 text-gray-500">
+                            <i class="bi bi-person-x-fill text-5xl text-gray-400"></i>
+                            <h3 class="mt-4 text-lg font-semibold text-gray-700">Belum Ada Data Pasien</h3>
+                            <p class="text-gray-500 mt-1">Silakan tambahkan data pasien baru untuk menampilkannya di sini.</p>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
 
+    <!-- Card list untuk mobile -->
+    <div class="block lg:hidden p-4 space-y-4">
+        <?php if (!empty($pasien)) : ?>
+            <?php foreach ($pasien as $p) : ?>
+                <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-gray-50">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <img class="object-cover w-12 h-12 rounded-full" src="https://ui-avatars.com/api/?name=<?= urlencode($p['nama']) ?>&background=e0f2fe&color=0369a1" alt="Avatar">
+                        <div>
+                            <p class="font-semibold text-gray-900"><?= esc($p['nama']); ?></p>
+                            <p class="text-xs text-gray-500">No. RM: <?= esc($p['no_RM']); ?></p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-700"><span class="font-medium">Alamat:</span> <?= esc($p['alamat']); ?></p>
+                    <p class="text-sm text-gray-700"><span class="font-medium">Kontak:</span> <?= esc($p['no_hp']); ?></p>
+                    <p class="text-sm text-gray-700"><span class="font-medium">Tanggal Lahir:</span> <?= date('d F Y', strtotime($p['tanggal_lahir'])); ?></p>
+                    <div class="mt-3">
+                        <a href="<?= base_url('dokter/riwayatpemeriksaan/' . $p['id_pasien']) ?>" class="inline-flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg border border-gray-300">
+                            <i class="bi bi-eye-fill w-5 mr-2"></i> Lihat Riwayat
+                        </a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else : ?>
+            <div class="text-center py-12 px-6 text-gray-500">
+                <i class="bi bi-person-x-fill text-5xl text-gray-400"></i>
+                <h3 class="mt-4 text-lg font-semibold text-gray-700">Belum Ada Data Pasien</h3>
+                <p class="text-gray-500 mt-1">Silakan tambahkan data pasien baru untuk menampilkannya di sini.</p>
+            </div>
+        <?php endif; ?>
+    </div>
 
+    <!-- Pagination -->
+    <div class="p-4 border-t flex flex-col sm:flex-row justify-between items-center text-sm text-gray-600">
+        <p class="mb-2 sm:mb-0">Menampilkan <span class="font-semibold">1</span>-10 dari <span class="font-semibold">100</span> hasil</p>
+        <div class="flex items-center space-x-1">
+            <a href="#" class="px-3 py-1 border rounded-lg hover:bg-gray-100"><i class="bi bi-chevron-left"></i></a>
+            <a href="#" class="px-3 py-1 border rounded-lg bg-sea-blue-500 text-white">1</a>
+            <a href="#" class="px-3 py-1 border rounded-lg hover:bg-gray-100">2</a>
+            <a href="#" class="px-3 py-1 border rounded-lg hover:bg-gray-100">3</a>
+            <span>...</span>
+            <a href="#" class="px-3 py-1 border rounded-lg hover:bg-gray-100">10</a>
+            <a href="#" class="px-3 py-1 border rounded-lg hover:bg-gray-100"><i class="bi bi-chevron-right"></i></a>
+        </div>
+    </div>
+</div>
 
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.js"></script>
-</body>
-
-</html>
+<?= $this->endSection() ?>

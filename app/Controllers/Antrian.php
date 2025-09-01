@@ -22,6 +22,7 @@ class Antrian extends BaseController
 
     public function index()
     {
+        // mengambil id_user berdasarkan pasien yang login
         $session = session();
         $userId = $session->get('id_user');
 
@@ -29,16 +30,19 @@ class Antrian extends BaseController
         if (!$pasien) {
             return redirect()->to('/dashboard')->with('error', 'Data pasien tidak ditemukan.');
         }
-
+        // menampilkan data di pendaftaran antrian pasien 
         $data = [
             'pasien' => $pasien,
             'title' => 'Pendaftaran Antrian Pasien'
         ];
-        return view('pendaftaran', $data);
+        return view('pasien/pendaftaran', $data);
     }
+
+    // menyimpan antrian untuk pasien yang telah melakukan pendaftaran
 
     public function simpan()
     {
+        // mengambil id_user berdasarkan pasien yang login
         $session = session();
         $userId = $session->get('id_user');
         $pasien = $this->pasienModel->where('id_user', $userId)->first();
@@ -47,57 +51,75 @@ class Antrian extends BaseController
             return redirect()->to('/dashboard')->with('error', 'Data pasien tidak ditemukan.');
         }
 
+        // untuk menginputkan keluhan pasien
         $keluhan = $this->request->getPost('keluhan');
         $tanggal = $this->request->getPost('tanggal');
-        $hari = date('l', strtotime($tanggal));
+
+        //  cekan pendaftaran ganda 
+        // Pengecekan ini harusnya ke tabel jadwal, bukan antrian 
+        $jadwalSudahAda = $this->jadwalModel
+            ->where('id_pasien', $pasien['id_pasien'])
+            ->where('tanggal_pemeriksaan', $tanggal)
+            ->where('status', 'Menunggu')
+            ->first();
+        // jika masih memliki pendaftaran
+        if ($jadwalSudahAda) {
+            // ---  arahkan kembali ke halaman form (/antrian) ---
+            return redirect()->to('/antrian')->with('error', 'Anda sudah memiliki jadwal di tanggal ini yang masih menunggu.');
+        }
+
+        // --- logika Pencarian Hari ---
+        // menggunakan array untuk mapping nama hari dari Inggris ke Indonesia
+        $hari = date('l', strtotime($tanggal)); // lngsung gunakan 'Tuesday'
 
         $db = \Config\Database::connect();
         $dokter = $db->table('jadwal_dokter')
             ->join('dokter', 'dokter.id_dokter = jadwal_dokter.id_dokter')
-            ->where('jadwal_dokter.hari', $hari)
+            ->where('jadwal_dokter.hari', $hari) // sekarang mencari 'Tuesday', cocok dengan DB
             ->get()
             ->getRowArray();
 
+        // jika tidak ada dokter yang bertugas saat memilih hari tidak bisa
         if (!$dokter) {
-            return redirect()->to('/antrian')->with('error', 'Tidak ada dokter bertugas di hari tersebut.');
+            return redirect()->to('/antrian')->with('error', 'Tidak ada dokter yang bertugas pada hari tersebut.');
         }
 
-        // Cek jika jadwal sudah ada
-        $jadwal = $this->jadwalModel
-            ->where('id_dokter', $dokter['id_dokter'])
-            ->where('tanggal_pemeriksaan', $tanggal)
-            ->first();
+        //  menyimpanan ke tabel jadwal 
+        $this->jadwalModel->save([
+            'id_pasien'           => $pasien['id_pasien'],
+            'id_dokter'           => $dokter['id_dokter'],
+            'tanggal_pemeriksaan' => $tanggal,
+            'status'              => 'Menunggu',
+        ]);
+        $id_jadwal = $this->jadwalModel->getInsertID();
 
-        if (!$jadwal) {
-            $this->jadwalModel->save([
-                'id_dokter' => $dokter['id_dokter'],
-                'tanggal_pemeriksaan' => $tanggal,
-                'status' => 'Menunggu'
-            ]);
-            $id_jadwal = $this->jadwalModel->getInsertID();
-        } else {
-            $id_jadwal = $jadwal['id_jadwal'];
-        }
+        // ---  logika nomor antrian  ---
+        //hitung antrian berdasarkan dokter dan tanggal/ 
+        $jumlahAntrianSebelumnya = $this->antrianModel
+            ->join('jadwal', 'jadwal.id_jadwal = antrian.id_jadwal')
+            ->where('jadwal.id_dokter', $dokter['id_dokter'])
+            ->where('jadwal.tanggal_pemeriksaan', $tanggal)
+            ->countAllResults();
 
-        // Hitung no antrian
-        $nomor_antrian = $this->antrianModel
-            ->where('id_jadwal', $id_jadwal)
-            ->countAllResults() + 1;
+        $nomor_antrian = $jumlahAntrianSebelumnya + 1;
 
-        $data = [
+        // mengambil data dari tabel antrian model
+        $dataAntrian = [
             'id_pasien' => $pasien['id_pasien'],
             'id_jadwal' => $id_jadwal,
             'tanggal' => $tanggal,
             'no_antrian' => $nomor_antrian,
             'no_RM' => $pasien['no_RM'],
             'status' => 'Menunggu',
+            'urutan_panggil' => $nomor_antrian,
             'keluhan' => $keluhan
         ];
 
-        if (!$this->antrianModel->save($data)) {
-            dd('Gagal insert', $data, $this->antrianModel->errors());
+        if (!$this->antrianModel->save($dataAntrian)) {
+            // jika ada error dari model, tampilkan untuk debugging
+            return redirect()->to('/antrian')->with('error', implode('<br>', $this->antrianModel->errors()));
         }
 
-        return redirect()->to('/jadwal')->with('success', 'Pendaftaran berhasil.');
+        return redirect()->to('/jadwal')->with('success', 'Pendaftaran berhasil! Nomor antrian Anda adalah ' . $nomor_antrian);
     }
 }

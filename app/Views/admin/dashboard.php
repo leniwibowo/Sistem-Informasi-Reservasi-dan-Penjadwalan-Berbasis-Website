@@ -1,166 +1,112 @@
-<!DOCTYPE html>
-<html lang="id">
+<?= $this->extend('templates/layout_admin') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard Admin</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<?= $this->section('title') ?>
+Dashboard Admin
+<?= $this->endSection() ?>
 
-    <style>
-        body {
-            background-color: #F2F2F2;
-        }
+<?= $this->section('content') ?>
 
-        .sidebar {
-            background-color: #ffffff;
-            min-height: 100vh;
-        }
+<!-- dashboard admin -->
+<div class="mb-8">
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Dashboard Admin</h1>
+    <p class="text-gray-500 mt-1">Ringkasan aktivitas dan data dari seluruh sistem Klinik DL Dental.</p>
+</div>
 
-        .sidebar a {
-            display: block;
-            padding: 1rem;
-            color: #000;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .sidebar a:hover {
-            background-color: #F2F2F2;
-            border-radius: 8px;
-        }
-
-        .topbar {
-            height: 60px;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 0 20px;
-            margin-top: 10px;
-            border-radius: 8px;
-        }
-
-        .card-icon {
-            font-size: 2rem;
-        }
-
-        .dashboard-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .card p {
-            margin: 0;
-        }
-
-        .number-box {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #000;
-        }
-
-        .card-title i {
-            margin-left: 8px;
-        }
-
-        .sidebar a.active {
-            background-color: #ffffff;
-            font-weight: bold;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-2 sidebar py-4">
-                <div class="sidebar">
-                    <a href="<?= base_url('/admin/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
-                    <a href="<?= base_url('/admin/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
-                    <a href="<?= base_url('/admin/kelolapasien') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Pasien</a>
-                    <a href="<?= base_url('/admin/keloladokter') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Dokter</a>
-                    <a href="<?= base_url('/admin/kelolaadmin') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Admin</a>
-                    <a href="<?= base_url('/admin/pasienterjadwal') ?>"><i class="bi-calendar-event-fill"></i> Pasien Terjadwal</a>
-
-                </div>
-            </nav>
-
-            <!-- Main Content -->
-            <div class="col-md-10">
-                <!-- Topbar -->
-                <div class="topbar dropdown">
-                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownProfile" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfile">
-                        <li><a class="dropdown-item" href="<?= base_url('/profil') ?>">Lihat Profil</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item text-danger" href="<?= base_url('/logout') ?>">Logout</a></li>
-                    </ul>
-                </div>
-
-                <!-- Dashboard Content -->
-                <div class="p-4">
-                    <div class="dashboard-title mb-4">DASHBORD</div>
-
-                    <div class="row g-3">
-                        <!-- Antrian -->
-                        <div class="col-md-4">
-                            <div class="card bg-primary text-white shadow-sm h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title d-flex justify-content-between align-items-center">
-                                        Antrian
-                                        <i class="bi bi-people card-icon"></i>
-                                    </h5>
-                                    <p class="text-muted mt-3">
-                                        <?= $antrian ? "$antrian pasien" : "Tidak ada daftar antrian" ?>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sisa Antrian -->
-                        <div class="col-md-4">
-                            <div class="card bg-warning text-white shadow-sm h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title d-flex justify-content-between align-items-center">
-                                        Sisa Antrian
-                                        <i class="bi bi-people card-icon"></i>
-                                    </h5>
-                                    <p class="text-muted mt-3">
-                                        <?= $sisa_antrian ? "$sisa_antrian pasien" : "Tidak ada daftar antrian" ?>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card bg-success text-white shadow-sm h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title d-flex justify-content-between align-items-center">
-                                        Sisa Antrian
-                                        <i class="bi bi-people card-icon"></i>
-                                    </h5>
-                                    <p class="text-muted mt-3">
-                                        <?= $sisa_antrian ? "$sisa_antrian pasien" : "Tidak ada daftar antrian" ?>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Jadwal -->
-
-                    </div>
-                </div> <!-- end dashboard content -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <!-- card untuk menampilkan total seluruh pasien -->
+    <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div class="flex items-start justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Total Pasien</p>
+                <p class="text-3xl sm:text-4xl font-bold text-gray-900 mt-1"><?= esc($total_pasien) ?></p>
             </div>
+            <div class="p-3 bg-indigo-100 rounded-lg"><i class="bi bi-people-fill text-xl text-indigo-600"></i></div>
         </div>
     </div>
+    <!-- untuk menampilkan seluruh total dokter  -->
+    <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div class="flex items-start justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Total Dokter</p>
+                <p class="text-3xl sm:text-4xl font-bold text-gray-900 mt-1"><?= esc($total_dokter) ?></p>
+            </div>
+            <div class="p-3 bg-sky-100 rounded-lg"><i class="bi bi-person-workspace text-xl text-sky-600"></i></div>
+        </div>
+    </div>
+    <!-- untuk menampilkaan seluruh totoal admin -->
+    <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div class="flex items-start justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Total Admin</p>
+                <p class="text-3xl sm:text-4xl font-bold text-gray-900 mt-1"><?= esc($total_admin) ?></p>
+            </div>
+            <div class="p-3 bg-rose-100 rounded-lg"><i class="bi bi-person-gear text-xl text-rose-600"></i></div>
+        </div>
+    </div>
+    <!-- untuk menampilkan total antrian hari ini -->
+    <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div class="flex items-start justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Antrian Hari Ini</p>
+                <p class="text-3xl sm:text-4xl font-bold text-gray-900 mt-1"><?= esc($antrian_hari_ini) ?></p>
+            </div>
+            <div class="p-3 bg-blue-100 rounded-lg"><i class="bi bi-card-list text-xl text-blue-600"></i></div>
+        </div>
+    </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 
-</html>
+<div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+    <!-- menampilkan pasien baru yang telah mendaftar -->
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div class="p-5 border-b flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-800">Pasien Baru Terdaftar</h3>
+            <a href="<?= base_url('/admin/kelolapasien') ?>" class="text-sm font-medium text-sky-600 hover:underline">Lihat Semua</a>
+        </div>
+        <!-- jika tidak ada pasien -->
+        <div class="p-3">
+            <ul class="space-y-2">
+                <?php if (!empty($pasien_terbaru)): ?>
+                    <?php foreach ($pasien_terbaru as $pasien): ?>
+                        <li class="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg">
+                            <div>
+                                <p class="font-semibold text-gray-800"><?= esc($pasien['nama']) ?></p>
+                                <p class="text-xs text-gray-500">No. RM: <?= esc($pasien['no_RM']) ?></p>
+                            </div>
+                            <span class="text-xs text-gray-400"><?= date('d M Y', strtotime($pasien['created_at'])) ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li class="text-center py-4 text-gray-500 text-sm">Tidak ada pasien baru.</li>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+    <!-- jadwal kunjungan -->
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div class="p-5 border-b flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-800">Jadwal Kunjungan Hari Ini</h3>
+            <a href="<?= base_url('/admin/antrian') ?>" class="text-sm font-medium text-sky-600 hover:underline">Lihat Semua</a>
+        </div>
+        <div class="p-3">
+            <ul class="space-y-2">
+                <?php if (!empty($jadwal_hari_ini)): ?>
+                    <?php foreach ($jadwal_hari_ini as $jadwal): ?>
+                        <li class="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg">
+                            <div>
+                                <p class="font-semibold text-gray-800"><?= esc($jadwal['nama_pasien']) ?></p>
+                                <p class="text-xs text-gray-500">No. Antrian <?= esc($jadwal['no_antrian']) ?> - Dr. <?= esc($jadwal['nama_dokter']) ?></p>
+                            </div>
+                            <span class="px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-full">Terjadwal</span>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li class="text-center py-4 text-gray-500 text-sm">Tidak ada jadwal hari ini.</li>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<?= $this->endSection() ?>

@@ -20,6 +20,7 @@ class JadwalDokterController extends BaseController
         $this->dokterModel = new DokterModel();
     }
 
+    // untuk perubahan jadwal dokter
     public function index()
     {
         $data = [
@@ -33,6 +34,7 @@ class JadwalDokterController extends BaseController
         return view('jadwal_dokter/index', $data);
     }
 
+    // menambahkan jadwal dokter
     public function tambah()
     {
         $data = [
@@ -42,6 +44,7 @@ class JadwalDokterController extends BaseController
         return view('jadwal_dokter/tambah', $data);
     }
 
+    // simpan perubahan jadwal
     public function simpan()
     {
         $this->jadwalDokterModel->save([

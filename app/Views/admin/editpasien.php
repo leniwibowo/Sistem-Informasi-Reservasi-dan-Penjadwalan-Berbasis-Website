@@ -1,133 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->extend('templates/layout_admin') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Data Pasien</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
+<?= $this->section('content') ?>
 
-        .sidebar {
-            width: 250px;
-            position: fixed;
-            height: 100vh;
-            background-color: #343a40;
-            padding-top: 20px;
-        }
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Edit Data Pasien</h2>
 
-        .sidebar a {
-            color: white;
-            padding: 10px 20px;
-            display: block;
-            text-decoration: none;
-        }
-
-        .sidebar a:hover {
-            background-color: #495057;
-        }
-
-        .content {
-            margin-left: 260px;
-            padding: 20px;
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <a href="<?= base_url('/admin/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
-        <a href="<?= base_url('/admin/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
-        <a href="<?= base_url('/admin/kelolapasien') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Pasien</a>
-        <a href="<?= base_url('/admin/keloladokter') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Dokter</a>
-        <a href="<?= base_url('/admin/kelolaadmin') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Admin</a>
-        <a href="<?= base_url('/admin/pasienterjadwal') ?>"><i class="bi-calendar-event-fill"></i> Pasien Terjadwal</a>
-
-    </div>
-
-    <!-- Content -->
-    <div class="content">
-        <div class="container mt-4">
-            <h3>Edit Data Pasien</h3>
-
-            <form action="<?= base_url('/admin/updatepasien/' . $pasien['id_pasien']) ?>" method="post">
-                <div class="mb-3">
-                    <label for="nik" class="form-label">NIK</label>
-                    <input type="text" name="nik" class="form-control" id="nik" value="<?= $pasien['nik'] ?>" readonly>
+    <?php if (session()->getFlashdata('errors')) : ?>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-5" role="alert">
+            <strong class="font-bold">Terjadi Kesalahan!</strong>
+            <ul class="mt-2 list-disc list-inside">
+                <?php foreach (session()->getFlashdata('errors') as $error) : ?>
+                    <li><?= esc($error) ?></li>
+                <?php endforeach ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+    <!-- edit pasien -->
+    <form action="<?= base_url('/admin/updatepasien/' . $pasien['id_pasien']) ?>" method="post">
+        <?= csrf_field() ?>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <div class="mb-4">
+                    <label for="nik" class="block text-gray-700 text-sm font-semibold mb-2">NIK</label>
+                    <input type="text" name="nik" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 bg-gray-100 cursor-not-allowed" id="nik" value="<?= esc($pasien['nik']) ?>" readonly>
                 </div>
 
-                <div class="mb-3">
-                    <label for="no_RM" class="form-label">No RM</label>
-                    <input type="text" name="no_RM" class="form-control" id="no_RM" value="<?= $pasien['no_RM'] ?>" readonly>
+                <div class="mb-4">
+                    <label for="no_RM" class="block text-gray-700 text-sm font-semibold mb-2">No RM</label>
+                    <input type="text" name="no_RM" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 bg-gray-100 cursor-not-allowed" id="no_RM" value="<?= esc($pasien['no_RM']) ?>" readonly>
                 </div>
 
-                <div class="mb-3">
-                    <label for="nama" class="form-label">Nama Pasien</label>
-                    <input type="text" name="nama" class="form-control" id="nama" value="<?= $pasien['nama'] ?>" required>
+                <div class="mb-4">
+                    <label for="nama" class="block text-gray-700 text-sm font-semibold mb-2">Nama Pasien</label>
+                    <input type="text" name="nama" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" id="nama" value="<?= esc($pasien['nama']) ?>" required>
                 </div>
 
-                <div class="mb-3">
-                    <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-                    <select name="jenis_kelamin" class="form-control" id="jenis_kelamin" required>
+                <div class="mb-4">
+                    <label for="jenis_kelamin" class="block text-gray-700 text-sm font-semibold mb-2">Jenis Kelamin</label>
+                    <select name="jenis_kelamin" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" id="jenis_kelamin" required>
                         <option value="Laki-laki" <?= $pasien['jenis_kelamin'] == 'Laki-laki' ? 'selected' : '' ?>>Laki-laki</option>
                         <option value="Perempuan" <?= $pasien['jenis_kelamin'] == 'Perempuan' ? 'selected' : '' ?>>Perempuan</option>
                     </select>
                 </div>
 
-                <div class="mb-3">
-                    <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
-                    <input type="date" name="tanggal_lahir" class="form-control" id="tanggal_lahir" value="<?= $pasien['tanggal_lahir'] ?>" readonly>
+                <div class="mb-4">
+                    <label for="tanggal_lahir" class="block text-gray-700 text-sm font-semibold mb-2">Tanggal Lahir</label>
+                    <input type="date" name="tanggal_lahir" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 bg-gray-100 cursor-not-allowed" id="tanggal_lahir" value="<?= esc($pasien['tanggal_lahir']) ?>" readonly>
                 </div>
 
-                <div class="mb-3">
-                    <label for="no_hp" class="form-label">Nomor HP</label>
-                    <input type="text" name="no_hp" class="form-control" id="no_hp" value="<?= $pasien['no_hp'] ?>" required>
+                <div class="mb-4">
+                    <label for="no_hp" class="block text-gray-700 text-sm font-semibold mb-2">Nomor HP</label>
+                    <input type="text" name="no_hp" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" id="no_hp" value="<?= esc($pasien['no_hp']) ?>" required>
                 </div>
 
-                <div class="mb-3">
-                    <label for="alamat" class="form-label">Alamat</label>
-                    <textarea name="alamat" class="form-control" id="alamat" required><?= $pasien['alamat'] ?></textarea>
+                <div class="mb-4">
+                    <label for="alamat" class="block text-gray-700 text-sm font-semibold mb-2">Alamat</label>
+                    <textarea name="alamat" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" id="alamat" required><?= esc($pasien['alamat']) ?></textarea>
+                </div>
+            </div>
+
+            <div>
+                <div class="mb-4">
+                    <label for="alergi" class="block text-gray-700 text-sm font-semibold mb-2">Alergi</label>
+                    <input type="text" name="alergi" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" id="alergi" value="<?= esc($pasien['alergi']) ?>">
                 </div>
 
-                <div class="mb-3">
-                    <label for="alergi" class="form-label">Alergi</label>
-                    <input type="text" name="alergi" class="form-control" id="alergi" value="<?= $pasien['alergi'] ?>">
+                <div class="mb-4">
+                    <label for="golongan_darah" class="block text-gray-700 text-sm font-semibold mb-2">Golongan Darah</label>
+                    <input type="text" name="golongan_darah" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" id="golongan_darah" value="<?= esc($pasien['golongan_darah']) ?>">
                 </div>
 
-                <div class="mb-3">
-                    <label for="golongan_darah" class="form-label">Golongan Darah</label>
-                    <input type="text" name="golongan_darah" class="form-control" id="golongan_darah" value="<?= $pasien['golongan_darah'] ?>">
+                <div class="mb-4">
+                    <label for="penyakit_jantung" class="block text-gray-700 text-sm font-semibold mb-2">Penyakit Jantung</label>
+                    <input type="text" name="penyakit_jantung" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" id="penyakit_jantung" value="<?= esc($pasien['penyakit_jantung']) ?>">
                 </div>
 
-                <div class="mb-3">
-                    <label for="penyakit_jantung" class="form-label">Penyakit Jantung</label>
-                    <input type="text" name="penyakit_jantung" class="form-control" id="penyakit_jantung" value="<?= $pasien['penyakit_jantung'] ?>">
+                <div class="mb-4">
+                    <label for="diabetes" class="block text-gray-700 text-sm font-semibold mb-2">Diabetes</label>
+                    <input type="text" name="diabetes" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" id="diabetes" value="<?= esc($pasien['diabetes']) ?>">
                 </div>
 
-                <div class="mb-3">
-                    <label for="diabetes" class="form-label">Diabetes</label>
-                    <input type="text" name="diabetes" class="form-control" id="diabetes" value="<?= $pasien['diabetes'] ?>">
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Username (opsional)</label>
+                    <input type="text" name="username" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" id="username" value="<?= esc($pasien['username']) ?>">
                 </div>
 
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username (opsional)</label>
-                    <input type="text" name="username" class="form-control" id="username" value="<?= $pasien['username'] ?>">
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Password (opsional)</label>
+                    <input type="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" id="password" placeholder="Isi jika ingin mengganti password">
                 </div>
-
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password (opsional)</label>
-                    <input type="password" name="password" class="form-control" id="password" placeholder="Isi jika ingin mengganti password">
-                </div>
-
-                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                <a href="<?= base_url('/admin/kelolapasien') ?>" class="btn btn-secondary">Kembali</a>
-            </form>
+            </div>
         </div>
-    </div>
-</body>
 
-</html>
+        <div class="mt-8 flex justify-end space-x-4">
+            <button type="submit" class="px-6 py-2 bg-sky-600 text-white font-bold rounded-lg hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50 transition-colors duration-200">
+                Simpan Perubahan
+            </button>
+            <a href="<?= base_url('/admin/kelolapasien') ?>" class="px-6 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 transition-colors duration-200">
+                Kembali
+            </a>
+        </div>
+    </form>
+</div>
+
+<?= $this->endSection() ?>

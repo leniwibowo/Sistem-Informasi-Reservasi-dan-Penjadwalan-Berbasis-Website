@@ -1,140 +1,151 @@
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->extend('templates/dokter_layout') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Riwayat Pemeriksaan</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-        }
+<?= $this->section('title') ?>
+Riwayat Pemeriksaan Pasien
+<?= $this->endSection() ?>
 
-        .sidebar {
-            width: 250px;
-            position: fixed;
-            height: 100vh;
-            background-color: #343a40;
-            padding-top: 20px;
-        }
+<?= $this->section('content') ?>
 
-        .sidebar a {
-            color: white;
-            padding: 10px 20px;
-            display: block;
-            text-decoration: none;
-        }
-
-        .sidebar a:hover {
-            background-color: #495057;
-        }
-
-        .content {
-            margin-left: 250px;
-            padding: 30px;
-            width: calc(100% - 250px);
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                position: relative;
-                height: auto;
-            }
-
-            .content {
-                margin-left: 0;
-                width: 100%;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <a href="<?= base_url('dokter/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
-        <a href="<?= base_url('dokter/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
-        <a href="<?= base_url('dokter/datapasien') ?>"><i class="bi bi-person-lines-fill"></i> Data Pasien</a>
-        <a href="<?= base_url('dokter/pasienterjadwal') ?>"><i class="bi bi-easel2-fill"></i> Pasien Terjadwal</a>
+<div class="flex flex-col sm:flex-row justify-between items-start mb-6">
+    <div>
+        <h1 class="text-3xl font-bold text-gray-900">Riwayat Pemeriksaan</h1>
+        <p class="mt-1 text-gray-500">Menampilkan seluruh riwayat medis untuk pasien yang dipilih.</p>
     </div>
 
-    <!-- Content -->
-    <div class="content">
-        <h3 class="text-center">Riwayat Pemeriksaaan Pasien</h3>
+</div>
 
-        <!-- Header Identitas Pasien -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <div class="row">
-                    <!-- Data Diri Pasien -->
-                    <div class="col-md-6">
-                        <h4>Data Diri Pasien</h4>
-                        <p class="mb-1"><strong>No RM:</strong> <?= esc($pasien['no_RM']) ?></p>
-                        <p class="mb-1"><strong>Nama:</strong> <?= esc($pasien['nama']) ?></p>
-                        <p class="mb-1"><strong>Tanggal Lahir:</strong> <?= date('d M Y', strtotime($pasien['tanggal_lahir'])) ?></p>
-                        <p class="mb-1"><strong>Jenis Kelamin:</strong> <?= esc($pasien['jenis_kelamin']) ?></p>
-                        <p class="mb-1"><strong>No Telepon:</strong> <?= esc($pasien['no_hp']) ?></p>
-                    </div>
-                    <!-- Data Medis Pasien -->
-                    <div class="col-md-6">
-                        <h4>Data Medis Pasien</h4>
-                        <p class="mb-1"><strong>Golongan Darah:</strong> <?= esc($pasien['golongan_darah']) ?></p>
-                        <p class="mb-1"><strong>Alergi:</strong> <?= esc($pasien['alergi']) ?></p>
-                        <p class="mb-1"><strong>Penyakit Jantung:</strong> <?= esc($pasien['penyakit_jantung']) ?></p>
-                        <p class="mb-1"><strong>Diabetes:</strong> <?= esc($pasien['diabetes']) ?></p>
-                    </div>
-                </div>
-            </div>
+<div class="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm mb-8">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-gray-200">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900"><?= esc($pasien['nama']) ?></h2>
+            <p class="text-sm text-gray-500">
+                No. Rekam Medis:
+                <span class="font-medium text-gray-700 bg-gray-100 px-2 py-1 rounded-md"><?= esc($pasien['no_RM']) ?></span>
+            </p>
         </div>
-
-        <!-- Tabel Riwayat -->
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title text-center">Riwayat Pemeriksaan</h5>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>No</th>
-                                <th>Tanggal</th>
-                                <th>Dokter</th>
-                                <th>Keluhan</th>
-                                <th>Diagnosis</th>
-                                <th>Tindakan</th>
-                                <th>Resep</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($riwayat)): ?>
-                                <?php $no = 1;
-                                foreach ($riwayat as $row): ?>
-                                    <tr>
-                                        <td><?= $no++ ?></td>
-                                        <td><?= date('d-m-Y', strtotime($row['waktu'])) ?></td>
-                                        <td><?= $row['nama_dokter'] ?></td>
-                                        <td><?= $row['keluhan'] ?></td>
-                                        <td><?= $row['diagnosis'] ?></td>
-                                        <td><?= $row['resep'] ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="7" class="text-center">Belum ada riwayat pemeriksaan.</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-                <a href="<?= base_url('/dokter/antrian') ?>"></a>
-            </div>
+        <div class="mt-3 sm:mt-0 text-sm text-gray-600">
+            <p><strong>Jenis Kelamin:</strong> <?= esc(ucfirst($pasien['jenis_kelamin'])) ?></p>
+            <p><strong>Tanggal Lahir:</strong> <?= date('d F Y', strtotime($pasien['tanggal_lahir'])) ?></p>
         </div>
     </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 pt-4 text-sm">
+        <div>
+            <p class="text-gray-500">No. Telepon</p>
+            <p class="font-semibold text-gray-800"><?= esc($pasien['no_hp']) ?></p>
+        </div>
+        <div>
+            <p class="text-gray-500">Golongan Darah</p>
+            <p class="font-semibold text-gray-800"><?= esc($pasien['golongan_darah']) ?></p>
+        </div>
+        <div>
+            <p class="text-gray-500">Alergi</p>
+            <p class="font-semibold text-gray-800"><?= esc($pasien['alergi'] ?: '-') ?></p>
+        </div>
+        <div>
+            <p class="text-gray-500">Riwayat Penyakit Jantung</p>
+            <p class="font-semibold text-gray-800"><?= esc(ucfirst($pasien['penyakit_jantung'])) ?></p>
+        </div>
+        <div>
+            <p class="text-gray-500">Riwayat Diabetes</p>
+            <p class="font-semibold text-gray-800"><?= esc(ucfirst($pasien['diabetes'])) ?></p>
+        </div>
+    </div>
+</div>
 
-</body>
+<div class="bg-white border border-gray-200 rounded-2xl shadow-sm">
+    <div class="p-5 border-b">
+        <h3 class="text-lg font-semibold text-gray-800">Detail Riwayat</h3>
+    </div>
 
-</html>
+    <div class="overflow-x-auto hidden md:block">
+        <table class="w-full text-sm text-left text-gray-600">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 w-12">No</th>
+                    <th scope="col" class="px-6 py-3">Tanggal</th>
+                    <th scope="col" class="px-6 py-3">Dokter</th>
+                    <th scope="col" class="px-6 py-3">Keluhan</th>
+                    <th scope="col" class="px-6 py-3">Diagnosis</th>
+                    <th scope="col" class="px-6 py-3">Tindakan</th>
+                    <th scope="col" class="px-6 py-3">Catatan</th>
+                    <th scope="col" class="px-6 py-3">Resep Obat</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($riwayat)): ?>
+                    <?php $no = 1;
+                    foreach ($riwayat as $row): ?>
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium text-gray-900"><?= $no++ ?></td>
+                            <td class="px-6 py-4 whitespace-nowrap"><?= date('d M Y', strtotime($row['waktu'])) ?></td>
+                            <td class="px-6 py-4"><?= esc($row['nama_dokter']) ?></td>
+                            <td class="px-6 py-4"><?= esc($row['keluhan']) ?></td>
+                            <td class="px-6 py-4"><?= esc($row['diagnosis']) ?></td>
+                            <td class="px-6 py-4"><?= esc($row['tindakan'] ?? '-') ?></td>
+                            <td class="px-6 py-4"><?= esc($row['catatan'] ?? '-') ?></td>
+                            <td class="px-6 py-4"><?= esc($row['resep']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7">
+                            <div class="text-center py-12">
+                                <i class="bi bi-file-earmark-medical text-5xl text-gray-300"></i>
+                                <p class="mt-3 font-semibold text-gray-700">Belum Ada Riwayat Pemeriksaan</p>
+                                <p class="text-gray-500 text-sm">Data riwayat pemeriksaan untuk pasien ini akan muncul di sini.</p>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="block md:hidden">
+        <?php if (!empty($riwayat)): ?>
+            <div class="p-4 space-y-4">
+                <?php $no = 1;
+                foreach ($riwayat as $row): ?>
+                    <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-gray-50 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-bold text-gray-800">Kunjungan #<?= $no++ ?></p>
+                                <p class="text-sm text-gray-600"><?= date('d F Y', strtotime($row['waktu'])) ?></p>
+                            </div>
+                            <span class="text-sm text-gray-600 font-medium"><?= esc($row['nama_dokter']) ?></span>
+                        </div>
+                        <div class="text-sm">
+                            <p class="text-gray-500">Keluhan:</p>
+                            <p class="font-semibold text-gray-800"><?= esc($row['keluhan']) ?></p>
+                        </div>
+                        <div class="text-sm">
+                            <p class="text-gray-500">Diagnosis:</p>
+                            <p class="font-semibold text-gray-800"><?= esc($row['diagnosis']) ?></p>
+                        </div>
+                        <div class="text-sm">
+                            <p class="text-gray-500">Tindakan:</p>
+                            <p class="font-semibold text-gray-800"><?= esc($row['tindakan'] ?? '-') ?></p>
+                        </div>
+                        <div class="text-sm">
+                            <p class="text-gray-500">Resep Obat:</p>
+                            <p class="font-semibold text-gray-800 whitespace-pre-wrap"><?= esc($row['resep']) ?></p>
+                        </div>
+                        <div class="text-sm">
+                            <p class="text-gray-500">Catatan:</p>
+                            <p class="font-semibold text-gray-800 whitespace-pre-wrap"><?= esc($row['catatan']) ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="text-center py-12">
+                <i class="bi bi-file-earmark-medical text-5xl text-gray-300"></i>
+                <p class="mt-3 font-semibold text-gray-700">Belum Ada Riwayat Pemeriksaan</p>
+                <p class="text-gray-500 text-sm">Data riwayat pemeriksaan untuk pasien ini akan muncul di sini.</p>
+            </div>
+        <?php endif; ?>
+    </div>
+
+</div>
+
+<?= $this->endSection() ?>

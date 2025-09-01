@@ -14,6 +14,8 @@ class RiwayatPemeriksaan extends BaseController
     {
         $this->riwayatModel = new RiwayatModel();
     }
+
+    // riwayat pemeriksaan pasien
     public function index()
     {
         $userID = session()->get('id_pasien');
@@ -25,10 +27,6 @@ class RiwayatPemeriksaan extends BaseController
             ->where('riwayat_pemeriksaan.id_pasien', $userID)
             ->orderBy('waktu', 'DESC')
             ->findAll();
-
-
-
-
         return view('riwayat_pemeriksaan', [
             'riwayat' => $riwayat
         ]);

@@ -14,8 +14,10 @@ class RiwayatModel extends Model
         'id_dokter',
         'waktu',
         'diagnosis',
+        'tindakan',
         'keluhan',
-        'resep'
+        'resep',
+        'catatan'
     ];
 
     public $useTimestamps = false;

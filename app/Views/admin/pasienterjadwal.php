@@ -1,104 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->extend('templates/layout_admin') ?>
+<?= $this->section('title') ?>
+Pasien Terjadwal
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Pasien Terjadwal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
-    <style>
-        body {
-            background-color: #f2f2f2;
-        }
-
-        .sidebar {
-            background-color: #ffffff;
-            min-height: 100vh;
-        }
-
-        .sidebar a {
-            display: block;
-            padding: 1rem;
-            color: #000;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .sidebar a:hover {
-            background-color: #f2f2f2;
-            border-radius: 8px;
-        }
-    </style>
-</head>
-
-<body class="bg-light">
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-2 sidebar py-4">
-                <a href="<?= base_url('/admin/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
-                <a href="<?= base_url('/admin/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
-                <a href="<?= base_url('/admin/kelolapasien') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Pasien</a>
-                <a href="<?= base_url('/admin/keloladokter') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Dokter</a>
-                <a href="<?= base_url('/admin/kelolaadmin') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Admin</a>
-                <a href="<?= base_url('/admin/pasienterjadwal') ?>"><i class="bi-calendar-event-fill"></i> Pasien Terjadwal</a>
-
-            </nav>
-
-            <div class="col-md-10 p-4">
-                <h2 class="mb-4">Cari Pasien untuk Penjadwalan</h2>
-
-                <?php if (session()->getFlashdata('success')) : ?>
-                    <div class="alert alert-success">
-                        <?= session()->getFlashdata('success') ?>
-                    </div>
-                <?php endif;  ?>
-
-                <form method="get" class="d-flex mb-4">
-                    <input type="text" name="keyword" class="form-control me-2" placeholder="Masukkan nama atau No RM">
-                    <button type="submit" class="btn btn-primary">Cari</button>
-                </form>
-
-                <?php if (!empty($pasien)) : ?>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>No</th>
-                                    <th>No RM</th>
-                                    <th>Nama</th>
-                                    <th>Jenis Kelamin</th>
-                                    <th>No Hp</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php $no = 1;
-                                foreach ($pasien as $p) : ?>
-                                    <tr>
-                                        <td><?= $no++ ?></td>
-                                        <td><?= esc($p['no_RM']) ?></td>
-                                        <td><?= esc($p['nama']) ?></td>
-                                        <td><?= esc($p['jenis_kelamin']) ?></td>
-                                        <td><?= esc($p['no_hp']) ?></td>
-                                        <td>
-                                            <a href="<?= base_url('admin/tambahjadwalpasien/' . $p['id_pasien']); ?>" class="btn btn-sm btn-success">
-                                                Jadwalkan
-                                            </a>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                <?php elseif (isset($_GET['keyword'])) : ?>
-                    <div class="alert alert-warning">Pasien tidak ditemukan</div>
-                <?php endif; ?>
-            </div>
-        </div>
+<div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+    <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-4">
+        <h2 class="text-2xl font-bold text-gray-800">
+            Daftar Pasien Terjadwal (Hari Ini & Akan Datang)
+        </h2>
+        <!-- tombol jadwalkan pasien -->
+        <a href="<?= base_url('/admin/jadwal_percobaan'); ?>" class="inline-flex items-center justify-center px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors duration-200 text-sm shadow-sm">
+            <i class="bi bi-calendar-plus-fill mr-2"></i>
+            Jadwalkan Pasien
+        </a>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <!-- pesan -->
+    <?php if (session()->getFlashdata('success')) : ?>
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-5 rounded-lg" role="alert">
+            <p class="font-bold">Sukses</p>
+            <p><?= session()->getFlashdata('success'); ?></p>
+        </div>
+    <?php endif; ?>
 
-</html>
+    <!-- tabel untuk desktop -->
+    <div class="overflow-x-auto hidden md:block">
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead class="bg-sky-700 text-white">
+                <tr>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Tanggal Periksa</th>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">No RM</th>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Nama Pasien</th>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Dokter</th>
+                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">Status</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700">
+                <?php if (!empty($jadwal_akan_datang)) : ?>
+                    <?php foreach ($jadwal_akan_datang as $jadwal) : ?>
+                        <tr class="border-b hover:bg-sky-50">
+                            <td class="py-3 px-4 font-medium"><?= date('d M Y', strtotime($jadwal['tanggal_pemeriksaan'])) ?></td>
+                            <td class="py-3 px-4 font-mono"><?= esc($jadwal['no_RM']) ?></td>
+                            <td class="py-3 px-4 font-medium"><?= esc($jadwal['nama_pasien']) ?></td>
+                            <td class="py-3 px-4">Dr. <?= esc($jadwal['nama_dokter']) ?></td>
+                            <td class="text-center py-3 px-4">
+                                <span class="px-2.5 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full capitalize">
+                                    <?= str_replace('_', ' ', esc($jadwal['status'])) ?>
+                                </span>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <tr>
+                        <td colspan="5" class="text-center text-gray-500 py-8">
+                            Belum ada pasien yang dijadwalkan.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- tampilan card mobile -->
+    <div class="md:hidden space-y-4">
+        <?php if (!empty($jadwal_akan_datang)) : ?>
+            <?php foreach ($jadwal_akan_datang as $jadwal) : ?>
+                <div class="border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition">
+                    <p class="text-sm text-gray-500">Tanggal Periksa</p>
+                    <p class="font-semibold"><?= date('d M Y', strtotime($jadwal['tanggal_pemeriksaan'])) ?></p>
+
+                    <p class="text-sm text-gray-500 mt-2">No RM</p>
+                    <p class="font-mono"><?= esc($jadwal['no_RM']) ?></p>
+
+                    <p class="text-sm text-gray-500 mt-2">Nama Pasien</p>
+                    <p class="font-medium"><?= esc($jadwal['nama_pasien']) ?></p>
+
+                    <p class="text-sm text-gray-500 mt-2">Dokter</p>
+                    <p>Dr. <?= esc($jadwal['nama_dokter']) ?></p>
+
+                    <p class="text-sm text-gray-500 mt-2">Status</p>
+                    <span class="inline-block mt-1 px-2.5 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full capitalize">
+                        <?= str_replace('_', ' ', esc($jadwal['status'])) ?>
+                    </span>
+                </div>
+            <?php endforeach; ?>
+        <?php else : ?>
+            <p class="text-center text-gray-500 py-4">Belum ada pasien yang dijadwalkan.</p>
+        <?php endif; ?>
+    </div>
+</div>
+
+<?= $this->endSection() ?>

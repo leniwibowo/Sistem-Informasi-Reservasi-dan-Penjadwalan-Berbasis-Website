@@ -32,14 +32,19 @@ class PasienModel extends Model
 
     public function getByNIK($nik)
     {
-        return $this->where('NIK', $nik)->first();
+        return $this->where('nik', $nik)->first();
     }
 
+    // function pasien pernah daftar
     public function getPasienPernahDaftar()
     {
         return $this->select('pasien.*')
             ->join('jadwal', 'jadwal.id_pasien = pasien.id_pasien')
             ->groupBy('pasien.id_pasien')
             ->findAll();
+    }
+    public function getDetailPasien($id)
+    {
+        return $this->where($this->primaryKey, $id)->first();
     }
 }

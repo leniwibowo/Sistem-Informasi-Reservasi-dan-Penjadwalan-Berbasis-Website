@@ -1,74 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->extend('templates/pasien_layout') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendaftaran Pasien</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-</head>
+<?= $this->section('title') ?>
+Profil Saya
+<?= $this->endSection() ?>
 
-<body>
-    <!DOCTYPE html>
-    <html lang="en">
+<?= $this->section('content') ?>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Profil Pasien</h1>
+    <p class="mt-1 text-gray-500">Berikut adalah detail data diri dan data medik Anda yang terdaftar di sistem.</p>
+</div>
 
-    <body>
+<!-- profil pasien -->
+<div class="bg-white p-6 sm:p-8 rounded-xl shadow-md border border-gray-200">
 
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-        <div class="container mt-5">
-            <div class="card shadow-sm rounded-4">
-                <div class="card-header bg-dark text-white rounded-top-4">
-                    <h4 class="mb-0"><i class="bi bi-person-circle me-2"></i>Profil Pasien</h4>
+        <div class="p-5 bg-gray-50 rounded-lg border border-gray-200">
+            <h3 class="text-lg font-semibold text-sky-700 border-b pb-3 mb-4 flex items-center">
+                <i class="bi bi-person-vcard-fill mr-3"></i>
+                Data Diri
+            </h3>
+            <dl class="space-y-4 text-sm">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+                    <dt class="font-medium text-gray-500">No. RM</dt>
+                    <dd class="sm:col-span-2 font-semibold text-gray-900 font-mono"><?= esc($pasien['no_RM']) ?></dd>
                 </div>
-                <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-0 shadow-sm p-3 h-100">
-                                <h5 class="text-primary border-bottom pb-2 mb-3">Data Pasien</h5>
-                                <p><strong>No RM:</strong> <?= esc($pasien['no_RM']) ?></p>
-                                <p><strong>Nama:</strong> <?= esc($pasien['nama']) ?></p>
-                                <p><strong>Tanggal Lahir:</strong> <?= esc($pasien['tanggal_lahir']) ?>, <?= date('d F Y', strtotime($pasien['tanggal_lahir'])) ?> / <?= esc($pasien['jenis_kelamin']) ?></p>
-                                <p><strong>No Telepon:</strong> <?= esc($pasien['no_hp']) ?></p>
-                                <p><strong>Alamat:</strong> <?= esc($pasien['alamat']) ?></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-0 shadow-sm p-3 h-100">
-                                <h5 class="text-primary border-bottom pb-2 mb-3">Data Medik</h5>
-                                <p><strong>Golongan Darah:</strong> <?= esc($pasien['golongan_darah']) ?></p>
-                                <p><strong>Alergi:</strong> <?= esc($pasien['alergi']) ?></p>
-                                <p><strong>Diabetes:</strong> <?= esc($pasien['diabetes']) ?></p>
-                                <p><strong>Penyakit Jantung:</strong> <?= esc($pasien['penyakit_jantung']) ?></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end">
-                        <a href="<?= base_url('/dashboard') ?>" class="btn btn-secondary me-2">
-                            <i class="bi bi-arrow-left"></i> Kembali
-                        </a>
-                        <a href="<?= base_url('/logout') ?>" class="btn btn-danger">
-                            <i class="bi bi-box-arrow-right"></i> Logout
-                        </a>
-                    </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+                    <dt class="font-medium text-gray-500">Nama Lengkap</dt>
+                    <dd class="sm:col-span-2 text-gray-800"><?= esc($pasien['nama']) ?></dd>
                 </div>
-            </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+                    <dt class="font-medium text-gray-500">TTL / Gender</dt>
+                    <dd class="sm:col-span-2 text-gray-800"><?= date('d F Y', strtotime($pasien['tanggal_lahir'])) ?> / <?= esc($pasien['jenis_kelamin']) ?></dd>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+                    <dt class="font-medium text-gray-500">No. Telepon</dt>
+                    <dd class="sm:col-span-2 text-gray-800"><?= esc($pasien['no_hp']) ?></dd>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+                    <dt class="font-medium text-gray-500">Alamat</dt>
+                    <dd class="sm:col-span-2 text-gray-800"><?= esc($pasien['alamat']) ?></dd>
+                </div>
+            </dl>
         </div>
 
+        <div class="p-5 bg-gray-50 rounded-lg border border-gray-200">
+            <h3 class="text-lg font-semibold text-sky-700 border-b pb-3 mb-4 flex items-center">
+                <i class="bi bi-file-earmark-medical-fill mr-3"></i>
+                Data Medik
+            </h3>
+            <dl class="space-y-4 text-sm">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+                    <dt class="font-medium text-gray-500">Gol. Darah</dt>
+                    <dd class="sm:col-span-2 font-semibold text-gray-900"><?= esc($pasien['golongan_darah']) ?></dd>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+                    <dt class="font-medium text-gray-500">Alergi</dt>
+                    <dd class="sm:col-span-2 text-gray-800"><?= esc($pasien['alergi']) ?></dd>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+                    <dt class="font-medium text-gray-500">Diabetes</dt>
+                    <dd class="sm:col-span-2 text-gray-800"><?= esc($pasien['diabetes']) ?></dd>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+                    <dt class="font-medium text-gray-500">Penyakit Jantung</dt>
+                    <dd class="sm:col-span-2 text-gray-800"><?= esc($pasien['penyakit_jantung']) ?></dd>
+                </div>
+            </dl>
+        </div>
 
+    </div>
 
-    </body>
+    <div class="flex justify-end items-center mt-8 pt-6 border-t">
+        <a href="<?= base_url('/dashboard') ?>" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg mr-3 transition-colors">
+            <i class="bi bi-arrow-left mr-2"></i>
+            Kembali ke Dashboard
+        </a>
+        <a href="<?= base_url('/logout') ?>" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors">
+            <i class="bi bi-box-arrow-right mr-2"></i>
+            Logout
+        </a>
+    </div>
 
-    </html>
+</div>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+<?= $this->endSection() ?>

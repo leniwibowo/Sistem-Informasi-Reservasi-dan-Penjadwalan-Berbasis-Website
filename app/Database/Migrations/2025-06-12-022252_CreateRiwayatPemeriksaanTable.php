@@ -34,6 +34,9 @@ class CreateRiwayatPemeriksaanTable extends Migration
             'keluhan' => [
                 'type' => 'TEXT',
             ],
+            'catatan' => [
+                'type' => 'TEXT',
+            ],
 
             'created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
             'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'

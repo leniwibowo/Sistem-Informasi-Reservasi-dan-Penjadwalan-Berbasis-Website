@@ -1,87 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->extend('templates/layout_admin') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Tambah Dokter</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <style>
-        body {
-            background-color: #f2f2f2;
-        }
+<?= $this->section('content') ?>
 
-        .sidebar {
-            background-color: #ffffff;
-            min-height: 100vh;
-        }
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Tambah Admin Baru</h2>
 
-        .sidebar a {
-            display: block;
-            padding: 1rem;
-            color: #000;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .sidebar a:hover {
-            background-color: #f2f2f2;
-            border-radius: 8px;
-        }
-    </style>
-</head>
-
-<body class="bg-light">
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-2 sidebar py-4">
-                <a href="<?= base_url('/admin/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
-                <a href="<?= base_url('/admin/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
-                <a href="<?= base_url('/admin/kelolapasien') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Pasien</a>
-                <a href="<?= base_url('/admin/keloladokter') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Dokter</a>
-                <a href="<?= base_url('/admin/kelolaadmin') ?>"><i class="bi bi-person-lines-fill"></i> Kelola Admin</a>
-                <a href="<?= base_url('/admin/pasienterjadwal') ?>"><i class="bi-calendar-event-fill"></i> Pasien Terjadwal</a>
-
-            </nav>
-
-            <!-- Content -->
-            <div class="col-md-10 p-4">
-                <h2 class="mb-4 text-center">Tambah Admin Baru</h2>
-
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <form method="post" action="<?= base_url('/admin/simpanadmin'); ?>">
-                            <?= csrf_field(); ?>
-
-                            <div class="mb-3">
-                                <label for="nama" class="form-label">Nama Admin</label>
-                                <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama admin" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" name="username" id="username" class="form-control" placeholder="Username login admin" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" name="password" id="password" class="form-control" placeholder="Password login admin" required>
-                            </div>
-
-                            <div class="d-flex justify-content-between">
-                                <a href="<?= base_url('/admin/kelolaadmin'); ?>"></a>
-                                <button type="submit" class="btn btn-success">Simpan</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-            </div>
+    <!-- pesan error validasi jika ada -->
+    <?php if (session()->getFlashdata('errors')) : ?>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-5" role="alert">
+            <strong class="font-bold">Terjadi Kesalahan!</strong>
+            <ul class="mt-2 list-disc list-inside">
+                <?php foreach (session()->getFlashdata('errors') as $error) : ?>
+                    <li><?= esc($error) ?></li>
+                <?php endforeach ?>
+            </ul>
         </div>
-    </div>
+    <?php endif; ?>
+    <!-- tambah admin -->
+    <!-- form dengan route harus sama-->
+    <form method="post" action="<?= base_url('/admin/simpanadmin'); ?>">
+        <?= csrf_field(); ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+        <div class="mb-4">
+            <label for="nama" class="block text-gray-700 text-sm font-semibold mb-2">Nama Admin</label>
+            <input type="text" name="nama" id="nama" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Masukkan nama lengkap admin" required value="<?= old('nama') ?>">
+        </div>
 
-</html>
+        <div class="mb-4">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" name="username" id="username" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Username untuk login" required value="<?= old('username') ?>">
+        </div>
+
+        <div class="mb-6">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Buat password yang kuat" required>
+        </div>
+
+        <div class="flex items-center justify-between mt-8">
+            <a href="<?= base_url('/admin/kelolaadmin'); ?>" class="px-6 py-2 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition-colors duration-200">
+                Kembali
+            </a>
+            <button type="submit" class="px-6 py-2 bg-sky-600 text-white font-bold rounded-lg hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50 transition-colors duration-200">
+                Simpan Admin
+            </button>
+        </div>
+    </form>
+</div>
+
+<?= $this->endSection() ?>

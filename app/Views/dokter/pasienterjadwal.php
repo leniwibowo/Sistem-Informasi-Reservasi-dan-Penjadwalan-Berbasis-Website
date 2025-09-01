@@ -1,122 +1,120 @@
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->extend('templates/dokter_layout') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Daftar Antrian Pasien</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <style>
-        body {
-            background-color: #F2F2F2;
-        }
+<?= $this->section('title') ?>
+Pasien Terjadwal
+<?= $this->endSection() ?>
 
-        .sidebar {
-            background-color: #ffffff;
-            min-height: 100vh;
-        }
+<?= $this->section('content') ?>
 
-        .sidebar a {
-            display: block;
-            padding: 1rem;
-            color: #000;
-            text-decoration: none;
-            font-weight: 500;
-        }
+<div class="flex flex-col sm:flex-row justify-between items-start mb-6">
+    <div>
+        <h1 class="text-3xl font-bold text-gray-900">Pasien Terjadwal</h1>
+        <p class="mt-1 text-gray-500">Daftar semua pasien yang dijawalkan ulang.</p>
+    </div>
+</div>
 
-        .sidebar a:hover {
-            background-color: #F2F2F2;
-            border-radius: 8px;
-        }
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm">
 
-        .topbar {
-            height: 60px;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 0 20px;
-            margin-top: 10px;
-            border-radius: 8px;
-        }
+    <div class="overflow-x-auto hidden lg:block">
+        <table class="w-full text-sm text-left text-gray-600">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-4">No</th>
+                    <th scope="col" class="px-6 py-4">No. RM</th>
+                    <th scope="col" class="px-6 py-4">Nama Pasien</th>
+                    <th scope="col" class="px-6 py-4">Dokter Pemeriksa</th>
+                    <th scope="col" class="px-6 py-4">Tanggal Periksa</th>
+                    <th scope="col" class="px-6 py-4">Catatan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($jadwal)) : ?>
+                    <?php $no = 1; // Sesuaikan dengan logika paginasi Anda 
+                    ?>
+                    <?php foreach ($jadwal as $j) : ?>
+                        <tr class="bg-white border-b hover:bg-gray-50 align-top">
+                            <td class="px-6 py-4 text-gray-800"><?= $no++ ?></td>
+                            <td class="px-6 py-4 font-mono text-gray-700"><?= esc($j['no_RM']); ?></td>
+                            <td class="px-6 py-4 font-semibold text-gray-900"><?= esc($j['nama_pasien']); ?></td>
+                            <td class="px-6 py-4"><?= esc($j['nama_dokter']); ?></td>
+                            <td class="px-6 py-4 whitespace-nowrap"><?= date('d F Y', strtotime($j['tanggal_pemeriksaan'])); ?></td>
+                            <td class="px-6 py-4">
+                                <p class="max-w-xs truncate" title="<?= esc($j['pemeriksaan']); ?>">
+                                    <?= esc($j['pemeriksaan'] ?? '-'); ?>
+                                </p>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <tr>
+                        <td colspan="6">
+                            <div class="text-center text-gray-500 py-16">
+                                <i class="bi bi-file-earmark-x text-6xl"></i>
+                                <p class="mt-4 text-lg font-medium">Data Tidak Ditemukan</p>
+                                <p class="mt-1 text-sm">Belum ada pasien yang terjadwalkan.</p>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 
-        .card-icon {
-            font-size: 2rem;
-        }
-    </style>
-</head>
-
-<body class="bg-light">
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 sidebar py-4">
-                <a href="<?= base_url('dokter/dashboard') ?>"><i class="bi bi-house-door-fill"></i> Dashboard</a>
-                <a href="<?= base_url('dokter/antrian') ?>"><i class="bi bi-person-badge-fill"></i> Antrian Pasien</a>
-                <a href="<?= base_url('dokter/datapasien') ?>"><i class="bi bi-person-lines-fill"></i> Data Pasien</a>
-                <a href="<?= base_url('dokter/pasienterjadwal') ?>"><i class="bi bi-easel2-fill"></i> Pasien Terjadwal</a>
-            </nav>
-            <div class="col md-10">
-                <div class="topbar">
-                    <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-                </div>
-                <div class="container mt-4">
-                    <h3 class="mb-4 text-center">Pasien Terjadwal</h3>
-
-                    <div class="table-responsive mt-3">
-                        <table class="table table-bordered table-hover align-middle">
-                            <thead class="table-dark">
-
-
-
-                                <tr class="text-center">
-                                    <td>No</td>
-                                    <td>no_RM</td>
-                                    <td>Nama Pasien</td>
-                                    <td>Nama Dokter</td>
-                                    <td>Hari, Tanggal</td>
-                                    <td>Catatan Pemeriksaan</td>
-                                </tr>
-
-                            </thead>
-                            <tbody>
-                                <?php if (!empty($jadwal)) : ?>
-                                    <?php $no = 1;
-                                    foreach ($jadwal as $j) : ?>
-                                        <tr>
-                                            <td class="text-center"><?= $no++ ?></td>
-                                            <td class="text-center"><?= esc($j['no_RM']); ?></td>
-                                            <td class="text-center"><?= esc($j['nama_pasien']); ?></td>
-                                            <td class="text-center"><?= esc($j['nama_dokter']); ?></td>
-                                            <td class="text-center"><?= esc($j['no_hp']); ?></td>
-                                            <td class="text-center"><?= date('l, d F Y', strtotime($j['tanggal_pemeriksaan'])); ?></td>
-                                            <td class="text-center"><?= esc($j['pemeriksaan'] ?? '-');  ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else : ?>
-                                    <tr>
-                                        <td colspan="6" class="text-center text-muted py-4">
-                                            <i class="bi bi-info-circle"></i> Belum ada pasien yang melakukan pemeriksaan.
-                                        </td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
+    <div class="block lg:hidden">
+        <div class="p-4 space-y-4">
+            <?php if (!empty($jadwal)) : ?>
+                <?php $no = 1; // Sesuaikan dengan logika paginasi Anda 
+                ?>
+                <?php foreach ($jadwal as $j) : ?>
+                    <div class="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-mono text-sm text-sea-blue-700 bg-sea-blue-100 px-2 py-0.5 rounded"><?= esc($j['no_RM']); ?></span>
+                            <span class="text-sm font-bold text-gray-700">#<?= $no++ ?></span>
+                        </div>
+                        <div class="space-y-2">
+                            <div>
+                                <p class="text-xs text-gray-500">Nama Pasien</p>
+                                <p class="font-semibold text-gray-800"><?= esc($j['nama_pasien']); ?></p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Dokter & Tgl Periksa</p>
+                                <p class="text-sm text-gray-600"><?= esc($j['nama_dokter']); ?> &bull; <?= date('d M Y', strtotime($j['tanggal_pemeriksaan'])); ?></p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Catatan Pemeriksaan</p>
+                                <p class="text-sm text-gray-600 truncate">
+                                    <?= esc($j['pemeriksaan'] ?? '-'); ?>
+                                </p>
+                            </div>
+                        </div>
                     </div>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <div class="text-center text-gray-500 py-16">
+                    <i class="bi bi-file-earmark-x text-6xl"></i>
+                    <p class="mt-4 text-lg font-medium">Data Tidak Ditemukan</p>
+                    <p class="mt-1 text-sm">Belum ada riwayat pemeriksaan pasien yang tercatat.</p>
                 </div>
-
-            </div>
-
-
-
+            <?php endif; ?>
         </div>
     </div>
 
+    <?php if (!empty($jadwal)) : ?>
+        <div class="p-4 sm:p-6 border-t bg-gray-50">
+            <nav class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0">
+                <span class="text-sm text-gray-600">
+                    Menampilkan <span class="font-semibold">1</span>-<span class="font-semibold">10</span> dari <span class="font-semibold">50</span> hasil
+                </span>
+                <div class="inline-flex -space-x-px text-sm">
+                    <a href="#" class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100">Sebelumnya</a>
+                    <a href="#" class="px-3 h-8 text-white bg-sea-blue-600 border border-sea-blue-600">1</a>
+                    <a href="#" class="px-3 h-8 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">2</a>
+                    <a href="#" class="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100">Selanjutnya</a>
+                </div>
+            </nav>
+        </div>
+    <?php endif; ?>
 
+</div>
 
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.js"></script>
-</body>
-
-</html>
+<?= $this->endSection() ?>
