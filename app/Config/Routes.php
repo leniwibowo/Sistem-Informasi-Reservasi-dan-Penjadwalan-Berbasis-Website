@@ -22,12 +22,18 @@ $routes->get('/profil', 'Pasien::profil');
 // routes pasien
 $routes->get('pasien/dashboard', 'Pasien::index', ['filter' => 'role:pasien']);
 $routes->get('/dashboard', 'Pasien::index', ['filter' => 'role:pasien']); //halaman dashboard
-$routes->get('/antrian', 'Antrian::index', ['filter' => 'role:pasien']); //halaman antrian
+$routes->get('/antrian', 'Antrian::index', ['filter' => 'role:pasien']);
+$routes->post('antrian/getDokter', 'Antrian::getDokter'); //halaman antrian
 $routes->post('/antrian/simpan', 'Antrian::simpan', ['filter' => 'role:pasien']); //menyimpan halaman antrian 
 $routes->get('/jadwal', 'Jadwal::index', ['filter' => 'role:pasien']); //halaman utama jadwal
 $routes->post('jadwal/simpan', 'Jadwal::simpan'); //simpan jadwal
-$routes->get('/jadwal/reschedule/(:num)', 'Jadwal::reschadyle/$1'); //untuk mengubah status jadi hadir
+$routes->get('jadwal/reschedule/(:num)', 'Jadwal::reschedule/$1');
+$routes->post('jadwal/update_reschedule/(:num)', 'Jadwal::update_reschedule/$1');
+$routes->get('api/get-dokter', 'Jadwal::getDokterByTanggalShift');
+
+//untuk mengubah status jadi hadir
 $routes->get('/riwayat_pemeriksaan', 'Pasien::RiwayatPemeriksaan');
+$routes->get('riwayat-pemeriksaan/qrcode/(:num)', 'RiwayatPemeriksaan::qrcode/$1');
 $routes->get('admin/selesai/(:num)', 'Admin::selesai/$1');
 $routes->get('admin/lewati/(:num)', 'Admin::lewati/$1');
 $routes->get('admin/profil_pasien/(:num)', 'Admin::profil_pasien/$1');
@@ -36,6 +42,9 @@ $routes->get('admin/api/dokter_by_jadwal', 'Admin::apiGetDokterByJadwal');
 $routes->get('admin/jadwal/tambah/(:num)', 'Admin::tambahJadwalPasien/$1');
 // Untuk MENYIMPAN data dari form
 $routes->post('admin/jadwal/tambah/(:num)', 'Admin::tambahJadwalPasien/$1');
+
+$routes->post('jadwal/getDokter', 'Jadwal::getDokter');
+
 
 // // Rute untuk menampilkan form edit pasien spesifik (dengan ID)
 

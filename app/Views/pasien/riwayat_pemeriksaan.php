@@ -27,11 +27,16 @@ Riwayat Pemeriksaan
         <div class="space-y-6">
             <?php foreach ($riwayat as $r): ?>
                 <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-                    <div class="px-6 py-3 bg-gray-50 border-b border-gray-200">
+                    <div class="px-6 py-3 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
                         <p class="text-sm font-semibold text-gray-700">
                             <i class="bi bi-calendar3 mr-2"></i>
                             <?= date('l, d F Y', strtotime($r['waktu'])) ?>
                         </p>
+                        <!-- barcode -->
+                        <img src="<?= base_url('riwayat-pemeriksaan/qrcode/' . $r['id_riwayat']) ?>"
+                            alt="QR Code Riwayat <?= $r['id_riwayat'] ?>"
+                            class="w-28 h-28">
+
                     </div>
 
                     <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -54,15 +59,16 @@ Riwayat Pemeriksaan
                             </div>
                         </div>
 
+                        <!-- Nama dokter + SIP -->
                         <div>
                             <div class="flex items-start">
-                                <i class="bi bi-person-fill-gear text-sky-600 mt-1 mr-3"></i>
+                                <i class="bi bi-person-vcard-fill text-sky-600 mt-1 mr-3"></i>
                                 <div>
-                                    <p class="text-sm font-medium text-gray-500">Tindakan</p>
-                                    <p class="text-gray-800">Dokter <?= esc($r['nama_dokter']) ?></p>
+                                    <p class="text-sm font-medium text-gray-500">Dokter</p>
                                 </div>
                             </div>
                         </div>
+
                         <div>
                             <div class="flex items-start">
                                 <i class="bi bi-person-fill-gear text-sky-600 mt-1 mr-3"></i>
@@ -86,13 +92,14 @@ Riwayat Pemeriksaan
                                 <i class="bi bi-clipboard2-pulse-fill text-sky-600 mt-1 mr-3"></i>
                                 <div>
                                     <p class="text-sm font-medium text-gray-500">Catatan</p>
-                                    <p class="text-gray-800  text-sm whitespace-pre-wrap"><?= $r['catatan'] ? esc($r['catatan']) : '-' ?></p>
+                                    <p class="text-gray-800 text-sm whitespace-pre-wrap"><?= $r['catatan'] ? esc($r['catatan']) : '-' ?></p>
                                 </div>
                             </div>
                         </div>
 
                     </div>
                 </div>
+
             <?php endforeach; ?>
         </div>
     <?php endif; ?>

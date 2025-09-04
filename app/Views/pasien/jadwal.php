@@ -5,7 +5,6 @@ Jadwal Kunjungan Saya
 <?= $this->endSection() ?>
 
 <?php
-// Helper untuk status badge, agar kode lebih bersih
 function getStatusBadge($status)
 {
     $status_text = esc(str_replace('_', ' ', $status));
@@ -33,6 +32,7 @@ function getStatusBadge($status)
 <!-- jadwal pemeriksaan pasien -->
 <?php if (!empty($jadwal_pasien)): ?>
 
+    <!-- Tampilan Tabel (Desktop) -->
     <div class="hidden md:block bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
         <table class="min-w-full text-sm text-left text-gray-600">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -42,7 +42,8 @@ function getStatusBadge($status)
                     <th scope="col" class="px-6 py-4">Dokter</th>
                     <th scope="col" class="px-6 py-4">Keluhan</th>
                     <th scope="col" class="px-6 py-4 text-center">Status</th>
-
+                    <th scope="col" class="px-6 py-4 text-center">Aksi</th>
+                </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
                 <?php foreach ($jadwal_pasien as $jadwal): ?>
@@ -62,20 +63,32 @@ function getStatusBadge($status)
                         <td class="px-6 py-4 text-center">
                             <?= getStatusBadge($jadwal['status']) ?>
                         </td>
-
+                        <td class="px-6 py-4 text-center">
+                            <?php if ($jadwal['status'] === 'Menunggu'): ?>
+                                <a href="<?= base_url('jadwal/reschedule/' . $jadwal['id_jadwal']) ?>"
+                                    class="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">
+                                    Reschedule
+                                </a>
+                            <?php else: ?>
+                                <span class="text-gray-400 text-xs">-</span>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 
+    <!-- Tampilan Kartu (Mobile) -->
     <div class="md:hidden grid grid-cols-1 gap-4">
         <?php foreach ($jadwal_pasien as $jadwal): ?>
             <div class="bg-white p-4 border border-gray-200 rounded-xl shadow-sm">
                 <div class="flex justify-between items-start mb-3">
                     <div>
                         <p class="font-bold text-gray-800"><?= date('l, d F Y', strtotime($jadwal['tanggal'])) ?></p>
-                        <p class="text-xs text-gray-500">No. Antrian: <span class="font-semibold text-gray-700"><?= esc($jadwal['no_antrian']) ?></span></p>
+                        <p class="text-xs text-gray-500">No. Antrian:
+                            <span class="font-semibold text-gray-700"><?= esc($jadwal['no_antrian']) ?></span>
+                        </p>
                     </div>
                     <?= getStatusBadge($jadwal['status']) ?>
                 </div>
@@ -89,6 +102,14 @@ function getStatusBadge($status)
                         <p class="font-semibold text-gray-800 text-right"><?= esc($jadwal['keluhan'] ?? '-') ?></p>
                     </div>
                 </div>
+
+                <!-- Tombol Reschedule -->
+                <?php if ($jadwal['status'] === 'Menunggu'): ?>
+                    <a href="<?= base_url('jadwal/reschedule/' . $jadwal['id_jadwal']) ?>"
+                        class="mt-3 inline-block px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">
+                        Reschedule
+                    </a>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     </div>

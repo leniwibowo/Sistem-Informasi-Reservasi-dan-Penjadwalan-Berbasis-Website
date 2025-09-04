@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\PasienModel;
 use App\Models\JadwalModel;
 use App\Models\AntrianModel;
+use App\Models\JadwalDokterModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 
@@ -15,12 +16,15 @@ class Jadwal extends BaseController
     protected $pasienModel;
     protected $jadwalModel;
     protected $antrianModel;
+    protected $jadwalDokterModel; // ✅ tambahkan
+
 
     public function __construct()
     {
         $this->pasienModel = new PasienModel();
         $this->jadwalModel = new JadwalModel();
         $this->antrianModel = new AntrianModel();
+        $this->jadwalDokterModel = new JadwalDokterModel(); // ✅ inisialisasi
     }
 
 
@@ -40,6 +44,7 @@ class Jadwal extends BaseController
         // data keluhan dan tanggal
         $keluhan = $this->request->getPost('keluhan');
         $tanggal = $this->request->getPost('tanggal');
+        $shift   = $this->request->getPost('shift'); // ✅ tambahkan shift dari form
         $hari = date('l', strtotime($tanggal)); // contoh: Monday, Tuesday, dll
 
         // Cari dokter yang sesuai dengan hari dipilih
@@ -87,6 +92,7 @@ class Jadwal extends BaseController
     }
 
 
+
     //untuk tampilan jadwal 
     public function index()
     {
@@ -115,5 +121,48 @@ class Jadwal extends BaseController
         ];
 
         return view('pasien/jadwal', $data);
+    }
+
+
+    public function reschedule($id_jadwal)
+    {
+        $jadwalModel = new JadwalModel();
+        $jadwal = $jadwalModel->find($id_jadwal);
+
+        if (!$jadwal) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $data = [
+            'jadwal' => $jadwal
+        ];
+
+        return view('pasien/jadwal_reschedule', $data);
+    }
+
+    public function update_reschedule($id)
+    {
+        $jadwalModel = new \App\Models\JadwalModel();
+        $antrianModel = new \App\Models\AntrianModel();
+
+        // ambil data input
+        $tanggal = $this->request->getPost('tanggal_pemeriksaan');
+        $shift   = $this->request->getPost('shift');
+        $id_dokter = $this->request->getPost('id_dokter');
+
+        // cari nomor antrian baru berdasarkan tanggal & shift
+        $no_antrian = $antrianModel->where('tanggal', $tanggal)
+            ->countAllResults() + 1;
+
+        // update data jadwal sesuai id
+        $jadwalModel->update($id, [
+            'tanggal_pemeriksaan' => $tanggal,
+            'shift' => $shift,
+            'id_dokter' => $id_dokter,
+            'id_antrian' => $no_antrian,
+            'status' => 'Menunggu'
+        ]);
+
+        return redirect()->to('/dashboard')->with('success', 'Jadwal berhasil di-reschedule');
     }
 }

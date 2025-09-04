@@ -18,6 +18,10 @@
                 <label for="no_hp" class="block text-gray-700 text-sm font-semibold mb-2">No. Handphone</label>
                 <input type="tel" name="no_hp" id="no_hp" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Contoh: 081234567890" required>
             </div>
+            <div class="mb-4">
+                <label for="sip" class="block text-gray-700 text-sm font-semibold mb-2">SIP </label>
+                <input type="tel" name="sip" id="sip" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Contoh: 1234" required>
+            </div>
 
             <div class="mb-4">
                 <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Username</label>

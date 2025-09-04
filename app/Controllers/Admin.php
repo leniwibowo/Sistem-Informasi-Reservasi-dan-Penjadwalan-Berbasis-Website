@@ -539,9 +539,10 @@ class Admin extends BaseController
     public function kelolaJadwalDokter()
     {
         // model JadwalDokterModel
-        $jadwalDokterModel = new \App\Models\JadwalDokterModel();
+        $jadwalDokterModel = new JadwalDokterModel();
 
         // ambil semua jadwal yang sudah di-join dengan nama dokter dari jadwakDokterModel
+        // Kami mengasumsikan model Anda sudah mengambil kolom 'shift'
         $jadwal_dokter = $jadwalDokterModel->getJadwalWithDokter();
 
         // ambil semua data dokter untuk ditampilkan di form tambah
@@ -556,14 +557,15 @@ class Admin extends BaseController
         return view('admin/kelolajadwaldokter', $data);
     }
 
-
     // simpan data dokter yang baru
     public function simpanJadwalDokter()
     {
+        // UPDATED CODE: Tambahkan validasi untuk 'shift'
         // validasi input
         $rules = [
             'id_dokter' => 'required|is_natural_no_zero',
-            'hari'      => 'required|in_list[Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday]'
+            'hari'      => 'required|in_list[Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday]',
+            'shift'     => 'required|in_list[Pagi,Sore]'
         ];
 
         if (!$this->validate($rules)) {
@@ -572,26 +574,30 @@ class Admin extends BaseController
 
         $id_dokter = $this->request->getPost('id_dokter');
         $hari = $this->request->getPost('hari');
+        // NEW CODE: Ambil data 'shift' dari post request
+        $shift = $this->request->getPost('shift');
 
+        // UPDATED CODE: Cek duplikasi jadwal, sekarang termasuk 'shift'
         // cek duplikat jadwal dari jadwalDokterModel 
-        $jadwalDokterModel = new \App\Models\JadwalDokterModel();
+        $jadwalDokterModel = new JadwalDokterModel();
         $jadwalSudahAda = $jadwalDokterModel->where('id_dokter', $id_dokter)
             ->where('hari', $hari)
+            ->where('shift', $shift)
             ->first();
 
         if ($jadwalSudahAda) {
-            return redirect()->back()->withInput()->with('error', 'Jadwal untuk dokter ini pada hari tersebut sudah ada.');
+            return redirect()->back()->withInput()->with('error', 'Jadwal untuk dokter ini pada hari dan shift tersebut sudah ada.');
         }
 
-        // simpan data baru
+        // UPDATED CODE: simpan data baru, termasuk 'shift'
         $jadwalDokterModel->save([
             'id_dokter' => $id_dokter,
-            'hari'      => $hari
+            'hari'      => $hari,
+            'shift'     => $shift
         ]);
 
         return redirect()->to('/admin/kelolajadwal')->with('success', 'Jadwal dokter berhasil ditambahkan.');
     }
-
     // hapus data dokter
     public function hapusJadwalDokter($id_jadwal_dokter)
     {

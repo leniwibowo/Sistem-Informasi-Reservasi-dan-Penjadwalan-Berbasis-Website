@@ -11,6 +11,7 @@ class JadwalDokterModel extends Model
     protected $allowedFields = [
         'id_dokter',
         'hari',
+        'shift',
         'created_at',
         'updated_at'
     ];
@@ -31,16 +32,34 @@ class JadwalDokterModel extends Model
             ->getResultArray();
     }
 
+    // fungsi untuk mengambil dokter berdasarkan tanggal + shift
+    public function getDokterByTanggalShift($tanggal, $shift)
+    {
+        $hariInggris = date('l', strtotime($tanggal));
+
+        return $this->db->table('jadwal_dokter')
+            ->select('dokter.id_dokter, dokter.nama')
+            ->join('dokter', 'dokter.id_dokter = jadwal_dokter.id_dokter')
+            ->where('jadwal_dokter.hari', $hariInggris)
+            ->where('jadwal_dokter.shift', $shift)
+            ->get()
+            ->getResultArray();
+    }
+
     // function ambil jadwal dokter
     public function getJadwalWithDokter()
     {
-        // Urutan hari dalam seminggu untuk sorting
-        $orderHari = "FIELD(jadwal_dokter.hari, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')";
-
-        return $this->select('jadwal_dokter.id_jadwal_dokter, jadwal_dokter.hari, dokter.nama as nama_dokter')
+        return $this->select('jadwal_dokter.*, dokter.nama as nama_dokter')
             ->join('dokter', 'dokter.id_dokter = jadwal_dokter.id_dokter')
-            ->orderBy($orderHari) // mengurutkan berdasarkan hari
-            ->orderBy('dokter.nama', 'ASC') // urutkan berdasarkan nama dokter
+            ->orderBy('jadwal_dokter.hari', 'ASC')
+            ->findAll();
+    }
+
+    public function getDokterByHari($hari)
+    {
+        return $this->select('dokter.id_dokter, dokter.nama, jadwal_dokter.hari')
+            ->join('dokter', 'dokter.id_dokter = jadwal_dokter.id_dokter')
+            ->where('jadwal_dokter.hari', $hari)
             ->findAll();
     }
 }

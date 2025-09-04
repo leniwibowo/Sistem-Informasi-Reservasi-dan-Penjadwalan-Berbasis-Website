@@ -32,6 +32,14 @@ Antrian Pasien
             <tbody>
                 <?php if (!empty($antrian)) : ?>
                     <?php foreach ($antrian as $a) : ?>
+                        <?php
+                        $status = $a['status'] ?? 'Menunggu';
+                        $badgeClass = match ($status) {
+                            'Sudah Diperiksa' => 'bg-green-100 text-green-800',
+                            'Sedang Diperiksa' => 'bg-blue-100 text-blue-800',
+                            default => 'bg-amber-100 text-amber-800'
+                        };
+                        ?>
                         <tr class="bg-white border-b hover:bg-gray-50">
                             <td class="px-6 py-4 font-bold text-gray-900 text-center">
                                 <?= esc($a['no_antrian']) ?>
@@ -41,20 +49,16 @@ Antrian Pasien
                             </td>
                             <td class="px-6 py-4"><?= esc($a['keluhan']) ?></td>
                             <td class="px-6 py-4 text-center">
-                                <?php
-                                $status = $a['status'] ?? 'Menunggu';
-                                $badgeClass = match ($status) {
-                                    'Sudah Diperiksa' => 'bg-green-100 text-green-800',
-                                    'Sedang Diperiksa' => 'bg-blue-100 text-blue-800',
-                                    default => 'bg-amber-100 text-amber-800'
-                                };
-                                ?>
                                 <span class="px-2.5 py-1 text-xs font-semibold rounded-full <?= $badgeClass ?>">
                                     <?= esc($status) ?>
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <a href="<?= base_url('dokter/pemeriksaan/' . $a['id_jadwal']) ?>" class="font-medium text-sea-blue-600 hover:underline">Periksa</a>
+                                <?php if ($status === 'Menunggu') : ?>
+                                    <span class="text-gray-400 cursor-not-allowed" title="Tunggu petugas memperbarui status">Periksa</span>
+                                <?php else : ?>
+                                    <a href="<?= base_url('dokter/pemeriksaan/' . $a['id_jadwal']) ?>" class="font-medium text-sea-blue-600 hover:underline">Periksa</a>
+                                <?php endif; ?>
                                 <a href="<?= base_url('dokter/riwayatpemeriksaan/' . $a['id_pasien']) ?>" class="ml-4 font-medium text-gray-500 hover:underline">Riwayat</a>
                             </td>
                         </tr>
@@ -96,7 +100,11 @@ Antrian Pasien
                     <p class="font-semibold text-gray-800"><?= esc($a['nama_pasien']) ?></p>
                     <p class="text-sm text-gray-600 mt-1">Keluhan: <?= esc($a['keluhan']) ?></p>
                     <div class="flex gap-4 mt-3">
-                        <a href="<?= base_url('dokter/pemeriksaan/' . $a['id_jadwal']) ?>" class="text-sea-blue-600 font-medium hover:underline">Periksa</a>
+                        <?php if ($status === 'Menunggu') : ?>
+                            <span class="text-gray-400 cursor-not-allowed" title="Tunggu petugas memperbarui status">Periksa</span>
+                        <?php else : ?>
+                            <a href="<?= base_url('dokter/pemeriksaan/' . $a['id_jadwal']) ?>" class="text-sea-blue-600 font-medium hover:underline">Periksa</a>
+                        <?php endif; ?>
                         <a href="<?= base_url('dokter/riwayatpemeriksaan/' . $a['id_pasien']) ?>" class="text-gray-500 font-medium hover:underline">Riwayat</a>
                     </div>
                 </div>

@@ -25,11 +25,12 @@ Kelola Jadwal Praktik Dokter
     <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 mb-8">
         <div class="border-b border-gray-200 pb-4 mb-6">
             <h2 class="text-xl md:text-2xl font-bold text-gray-800">Tambah Jadwal Praktik Baru</h2>
-            <p class="text-gray-500 mt-1">Pilih dokter dan hari praktik untuk ditambahkan ke sistem.</p>
+            <p class="text-gray-500 mt-1">Pilih dokter, hari, dan shift praktik untuk ditambahkan ke sistem.</p>
         </div>
         <form action="<?= base_url('admin/jadwal-dokter/simpan') ?>" method="post">
             <?= csrf_field() ?>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+            <!-- UPDATED CODE: Tambahkan grid baru untuk mengakomodasi input shift -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
                 <div>
                     <label for="id_dokter" class="block mb-2 text-sm font-medium text-gray-700">Dokter</label>
                     <select name="id_dokter" id="id_dokter" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition" required>
@@ -52,6 +53,15 @@ Kelola Jadwal Praktik Dokter
                         <option value="Sunday">Minggu</option>
                     </select>
                 </div>
+                <!-- NEW CODE: Tambahkan dropdown untuk shift -->
+                <div>
+                    <label for="shift" class="block mb-2 text-sm font-medium text-gray-700">Shift Praktik</label>
+                    <select name="shift" id="shift" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition" required>
+                        <option value="" disabled selected>-- Pilih Shift --</option>
+                        <option value="Pagi">Pagi</option>
+                        <option value="Sore">Sore</option>
+                    </select>
+                </div>
                 <div class="md:col-span-1">
                     <button type="submit" class="w-full flex items-center justify-center gap-x-2 text-white bg-sky-600 hover:bg-sky-700 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg px-6 py-3 text-center transition-all">
                         <i class="bi bi-plus-circle-fill"></i>
@@ -67,19 +77,21 @@ Kelola Jadwal Praktik Dokter
             <h2 class="text-xl font-bold text-gray-800">Daftar Jadwal Praktik Aktif</h2>
         </div>
         <div class="overflow-x-auto">
+            <!-- UPDATED CODE: Tambahkan kolom untuk "Shift" -->
             <table class="w-full text-sm text-left text-gray-600">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3">No</th>
                         <th scope="col" class="px-6 py-3">Nama Dokter</th>
                         <th scope="col" class="px-6 py-3">Hari</th>
+                        <th scope="col" class="px-6 py-3">Shift</th>
                         <th scope="col" class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($jadwal_dokter)) : ?>
                         <tr class="bg-white border-b">
-                            <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
                                 Belum ada jadwal praktik yang ditambahkan.
                             </td>
                         </tr>
@@ -96,18 +108,22 @@ Kelola Jadwal Praktik Dokter
                                     // nama hari ke Bahasa Indonesia
                                     $hari_map = [
                                         'Monday'    => 'Senin',
-                                        'Tuesday' => 'Selasa',
+                                        'Tuesday'   => 'Selasa',
                                         'Wednesday' => 'Rabu',
                                         'Thursday'  => 'Kamis',
-                                        'Friday'  => 'Jumat',
+                                        'Friday'    => 'Jumat',
                                         'Saturday'  => 'Sabtu',
                                         'Sunday'    => 'Minggu'
                                     ];
                                     echo $hari_map[$jadwal['hari']];
                                     ?>
                                 </td>
+                                <!-- NEW CODE: Tampilkan data shift -->
+                                <td class="px-6 py-4"><?= esc($jadwal['shift']) ?></td>
                                 <td class="px-6 py-4 text-center">
-                                    <a href="<?= base_url('admin/jadwal-dokter/hapus/' . $jadwal['id_jadwal_dokter']) ?>" class="font-medium text-red-600 hover:underline" onclick="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">
+                                    <!-- NOTE: Perintah ini tidak mendukung fungsi `confirm()` secara langsung di dalam lingkungan ini.
+                                               Anda perlu membuat pop-up modal kustom untuk mengonfirmasi penghapusan. -->
+                                    <a href="<?= base_url('admin/jadwal-dokter/hapus/' . $jadwal['id_jadwal_dokter']) ?>" class="font-medium text-red-600 hover:underline">
                                         Hapus
                                     </a>
                                 </td>

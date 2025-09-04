@@ -9,7 +9,7 @@ class DokterModel extends Model
     protected $table = 'dokter'; //nama tabel
     protected $primaryKey = 'id_dokter';
 
-    protected $allowedFields = ['nama', 'no_hp', 'username', 'password', 'role', 'id_user'];
+    protected $allowedFields = ['nama', 'sip', 'no_hp', 'username', 'password', 'role', 'id_user'];
     protected $useTimestamps = false;
 
     public function getByUsername($username)

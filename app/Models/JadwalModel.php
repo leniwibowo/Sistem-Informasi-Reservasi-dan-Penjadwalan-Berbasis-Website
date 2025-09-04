@@ -18,6 +18,7 @@ class JadwalModel extends Model
         'id_pasien',
         'id_dokter',
         'tanggal_pemeriksaan',
+        'shift',
         'pemeriksaan', // Catatan awal atau keluhan
         'status',
     ];

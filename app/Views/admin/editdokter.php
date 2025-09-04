@@ -18,7 +18,10 @@
             <label for="no_hp" class="block text-gray-700 text-sm font-semibold mb-2">No HP</label>
             <input type="text" name="no_hp" id="no_hp" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" value="<?= esc($dokter['no_hp']) ?>" required>
         </div>
-
+        <div class="mb-5">
+            <label for="sip" class="block text-gray-700 text-sm font-semibold mb-2">SIP </label>
+            <input type="text" name="sip" id="sip" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" value="<?= esc($dokter['sip']) ?>" required>
+        </div>
         <div class="mb-5">
             <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Username</label>
             <input type="text" name="username" id="username" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" value="<?= esc($dokter['username']) ?>" required>
