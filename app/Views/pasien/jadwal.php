@@ -102,14 +102,6 @@ function getStatusBadge($status)
                         <p class="font-semibold text-gray-800 text-right"><?= esc($jadwal['keluhan'] ?? '-') ?></p>
                     </div>
                 </div>
-
-                <!-- Tombol Reschedule -->
-                <?php if ($jadwal['status'] === 'Menunggu'): ?>
-                    <a href="<?= base_url('jadwal/reschedule/' . $jadwal['id_jadwal']) ?>"
-                        class="mt-3 inline-block px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">
-                        Reschedule
-                    </a>
-                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     </div>

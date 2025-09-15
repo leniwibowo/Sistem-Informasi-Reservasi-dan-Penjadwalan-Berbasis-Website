@@ -15,7 +15,6 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <script>
-        // Customizing Tailwind's default theme to add our color palette
         tailwind.config = {
             theme: {
                 extend: {
@@ -41,15 +40,40 @@
         }
     </script>
     <style>
-        /* Menambahkan background pattern yang halus */
         .pattern-bg {
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230ea5e9' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
     </style>
 </head>
 
-<body class="bg-sky-50 font-sans">
+<body class="bg-sky-50 font-sans" x-data="{ openModal: true }">
 
+    <!-- Popup Modal -->
+    <div x-show="openModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white w-full max-w-md rounded-xl shadow-lg p-6 relative">
+            <!-- Tombol Close -->
+            <button @click="openModal = false" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+                ✕
+            </button>
+            <!-- Isi Popup -->
+            <div class="text-center">
+                <h2 class="text-2xl font-bold text-sky-600 mb-3">Informasi Penting</h2>
+                <p class="text-gray-600 text-sm">
+                    Pastikan Anda sudah mendaftar akun terlebih dahulu sebelum melakukan login.
+                    Jika belum memiliki akun, silakan klik tombol <b>Daftar Sekarang</b>.
+                </p>
+                <div class="mt-5 flex justify-center gap-3">
+                    <button @click="openModal = false"
+                        class="px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition">
+                        Saya Mengerti
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Popup Modal -->
+
+    <!-- Kontainer Login -->
     <div class="flex min-h-screen items-center justify-center p-4">
 
         <div class="w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl flex flex-col md:flex-row">
